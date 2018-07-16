@@ -3,7 +3,7 @@ name = "rusty-space-program"
 version = "0.1.0"
 authors = [
     "Zion Nimchuk <zionnimchuk@gmail.com>",
-    "Ben McGunigle"]
+    "Ben McGunigle <bnmcgn@gmail.com>"]
 
 [[bin]]
 name = "rusty-space-program"
