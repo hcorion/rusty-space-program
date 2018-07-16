@@ -14,7 +14,8 @@ use piston_window::*;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
-    rotation: f64   // Rotation for the square.
+    rotation: f64,   // Rotation for the square.
+    window: PistonWindow
 }
 
 impl App {
@@ -28,13 +29,13 @@ impl App {
         let rotation = self.rotation;
         let (x, y) = ((args.width / 2) as f64,
                       (args.height / 2) as f64);
-
+        println!("asdf");
+        draw_background(&mut self.window);
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
-            clear(GREEN, gl);
-            draw_background(self);
+            //clear(GREEN, gl);
 
-
+            println!("qwert");
             let transform = c.transform.trans(x, y)
                                        .rot_rad(rotation)
                                        .trans(-25.0, -25.0);
@@ -61,12 +62,10 @@ fn draw_background (window: &mut PistonWindow) {
         &TextureSettings::new()
     ).unwrap();
     window.set_lazy(true);
-    while let Some(e) = window.next() {
-        window.draw_2d(&e, |c, g| {
-            clear([1.0; 4], g);
-            image(&background, c.transform, g);
+    window.draw_2d(&std::ptr::null, |c, g| {
+        clear([1.0; 4], g);
+        image(&background, c.transform, g);
         });
-    }
 }
 
 fn main() {
@@ -83,14 +82,16 @@ fn main() {
         .build()
         .unwrap();
 
+
     // Create a new game and run it.
     let mut app = App {
         gl: GlGraphics::new(opengl),
-        rotation: 0.0
+        rotation: 0.0,
+        window: window
     };
 
     let mut events = Events::new(EventSettings::new());
-    while let Some(e) = events.next(&mut window) {
+    while let Some(e) = events.next(&mut app.window) {
         if let Some(r) = e.render_args() {
             app.render(&r);
         }
