@@ -2,12 +2,15 @@ extern crate piston;
 extern crate graphics;
 extern crate piston_window;
 extern crate opengl_graphics;
+extern crate find_folder;
 
 use piston::window::WindowSettings;
 use piston::event_loop::*;
 use piston::input::*;
 use piston_window::PistonWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
+
+use piston_window::*;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
@@ -29,7 +32,7 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             clear(GREEN, gl);
-            //drawBackground(self);
+            draw_background(self);
 
 
             let transform = c.transform.trans(x, y)
@@ -47,25 +50,24 @@ impl App {
     }
 }
 
-/*
-fn drawBackground (&mut window: PistonWindow) {
+fn draw_background (window: &mut PistonWindow) {
+
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
     let background = assets.join("bg.png");
-    let background G2dTexture = Texture::from_path(
+    let background: G2dTexture = Texture::from_path(
         &mut window.factory,
-        &background Flip::None,
+        &background, Flip::None,
         &TextureSettings::new()
     ).unwrap();
     window.set_lazy(true);
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g| {
             clear([1.0; 4], g);
-            image(&background c.transform, g);
+            image(&background, c.transform, g);
         });
     }
 }
-*/
 
 fn main() {
     // Change this to OpenGL::V2_1 if not working.
