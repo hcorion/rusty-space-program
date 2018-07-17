@@ -9,6 +9,7 @@ pub struct Obj {
     pub v: f32,
     // Probably acceleration
     pub a: f32,
+    // Amount of time in seconds since bird's birth, probably
     pub t: u64,
     pub f: f32,
     pub boost: bool,

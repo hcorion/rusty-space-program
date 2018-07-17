@@ -38,6 +38,16 @@ pub struct Sprites {
 }
 
 impl Game {
+    pub fn new() -> Game {
+    Game {
+        dt: 0.0,
+        oldT: 0,
+        particles: Vec::new(),
+        objectList: Vec::new(),
+        maxScore: 0,
+        newScore: false
+    }
+}
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
     pub fn run(&mut self, now: u64)
     {
@@ -100,9 +110,9 @@ impl Game {
 
             self.step_particles(DT);
         }
-        //if self.bird().t > 5 {
-        //    self.new_bird(&self.bird());
-        //}
+        if self.bird().t > 5 {
+            self.new_bird();
+        }
 
         // Drawing stuff!!!!
 
@@ -121,6 +131,8 @@ impl Game {
     }
 
     pub fn new_bird(&mut self){
+        let len = self.objectList.len() -1;
+        self.objectList[len].is_bird = false;
         self.objectList.push(utils::Obj {
             x: 0.0,
             y: -utils::R*1.25,
