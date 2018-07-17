@@ -89,10 +89,10 @@ impl Game {
 
             let mut alive = 0;
             // Unfortunately not as clean as the original
-            for index in 0..self.object_list.len()-1
+            for index in 0..self.object_list.len()
             {
                 gravity::grav(&mut self.object_list[index], DT);
-                for index2 in 0..self.object_list.len()-1 {
+                for index2 in 0..self.object_list.len() {
                     if self.object_list[index] == self.object_list[index2] ||
                        self.object_list[index].dead == true ||
                        self.object_list[index2].dead == true {
@@ -101,8 +101,8 @@ impl Game {
                     let d = utils::dist(self.object_list[index].x - self.object_list[index2].x, 
                             self.object_list[index].y - self.object_list[index2].y);
                     if d < 20.0 {
-                        gravity::kill_bird(&self.object_list[index]);
-                        gravity::kill_bird(&self.object_list[index2]);
+                        //gravity::kill_bird(&self.object_list[index]);
+                        //gravity::kill_bird(&self.object_list[index2]);
                     }
 
                 }
