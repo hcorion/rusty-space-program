@@ -23,7 +23,8 @@ pub struct App {
     rotation: f64,   // Rotation for the square.
     window: PistonWindow,
     sprites: game::Sprites,
-    background: G2dTexture
+    background: G2dTexture,
+    game: game::Game
 }
 
 impl App {
@@ -38,6 +39,8 @@ impl App {
         let (x, y) = ((args.width / 2) as f64,
                       (args.height / 2) as f64);
         self.draw_background(event);
+        //self.draw_bird(event,
+        //game::new_bu)
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             //clear(GREEN, gl);
@@ -127,7 +130,15 @@ fn init_app () -> App {
         rotation: 0.0,
         background: initialize_texture(&mut window, "bg.png"),
         window: window,
-        sprites: sprites
+        sprites: sprites,
+        game: game::Game {
+            dt: 0.0,
+            oldT: 0,
+            particles: vec![],
+            objectList: vec![],
+            maxScore: 0,
+            newScore: false
+        }
     };
     app
 }
