@@ -43,7 +43,7 @@ impl App {
         self.window.set_lazy(true);
         self.window.draw_2d(&event, |c, g| {
             clear([1.0; 4], g);
-            image(background, c.transform, g);
+            image(background, c.transform.trans(400.0 - 128.0, 400.0 - 128.0), g);
         });
     }
 
@@ -60,8 +60,8 @@ impl App {
                 println!("draw_birds x: {} y: {} a: {}", bird.x, bird.y, bird.a);
                 self.window.draw_2d(&event, |c, g| {
                     let transform = c.transform.trans(
-                        (128.0 + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
-                        (128.0 + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
+                        (400.0 + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
+                        (400.0 + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
                         .rot_rad(
                             utils::interpolate_angle(bird.a_prev, bird.a, alpha))
                         .trans(-20.0, -20.0);
@@ -89,7 +89,7 @@ fn init_app () -> App {
 
     let mut window: Window = WindowSettings::new(
         "Rusty Flaps",
-        [256, 256]
+        [800, 800]
     )
         .opengl(opengl)
         .exit_on_esc(true)
