@@ -25,6 +25,16 @@ pub struct Game {
     pub maxScore: u32,
     pub newScore: bool
 }
+
+pub struct Sprites {
+    pub bird_1: G2dTexture,
+    pub bird_2: G2dTexture,
+    pub bird_3: G2dTexture,
+    pub bird_x: G2dTexture,
+    pub particle_1: G2dTexture,
+    pub particle_2: G2dTexture
+}
+
 impl Game {
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
     pub fn run(&mut self, now: u64)
