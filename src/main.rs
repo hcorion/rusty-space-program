@@ -22,6 +22,7 @@ pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
     rotation: f64,   // Rotation for the square.
     window: PistonWindow,
+    sprites: game::Sprites,
     background: G2dTexture
 }
 
@@ -66,18 +67,18 @@ impl App {
 
     fn draw_bird
         (&mut self, event: Event, bird: utils::Obj, time: i32, alpha: f32) {
-            let whatbird = if bird.dead {self.sprites.bird_x}
+            let whatbird = if bird.dead {&self.sprites.bird_x}
             else
-            {let phase = time % 0.8;
-             if phase < 0.2 {self.sprites.bird_1}
-             else if phase < 0.4 {self.sprites.bird_2}
-             else if phase < 0.6 {self.sprites.bird_3}
-             else {self.sprites.bird_2}};
+            {let phase = time as f32 % 0.8;
+             if phase < 0.2 {&self.sprites.bird_1}
+             else if phase < 0.4 {&self.sprites.bird_2}
+             else if phase < 0.6 {&self.sprites.bird_3}
+             else {&self.sprites.bird_2}};
 
         self.window.draw_2d(&event, |c, g| {
             let transform = c.transform.trans(
-                alpha*bird.x + (1-alpha*bird.x_prev),
-                alpha*bird.y + (1-alpha*bird.y_prev))
+                (alpha*bird.x + (1.0-alpha*bird.x_prev)).into(),
+                (alpha*bird.y + (1.0-alpha*bird.y_prev)).into())
                 .rot_rad(utils::interpolate_angle(bird.a_prev, bird.a, alpha))
                 .trans(-20.0, -20.0);
 
@@ -112,7 +113,7 @@ fn init_app () -> App {
         .build()
         .unwrap();
 
-    let sprites = Sprites {
+    let sprites = game::Sprites {
         bird_1: initialize_texture(&mut window, "bird-1.png"),
         bird_2: initialize_texture(&mut window, "bird-2.png"),
         bird_3: initialize_texture(&mut window, "bird-3.png"),
@@ -125,7 +126,8 @@ fn init_app () -> App {
         gl: GlGraphics::new(opengl),
         rotation: 0.0,
         background: initialize_texture(&mut window, "bg.png"),
-            window: window
+        window: window,
+        sprites: sprites
     };
     app
 }
