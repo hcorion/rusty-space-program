@@ -23,7 +23,7 @@ pub fn grav(mut obj: &mut utils::Obj, dt: f32)
   else {
     let aa = obj.y.atan2(obj.x);
     if d < 200.0 {
-      obj.a = aa + (PI/2.0) * (d-100.0/100.0);
+      obj.a = aa + (PI/2.0) * ((d-100.0)/100.0);
     }
     else {
       obj.a = aa + (PI/2.0);

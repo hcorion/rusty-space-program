@@ -57,6 +57,7 @@ impl App {
                  else if phase < 0.4 {&self.sprites.bird_2}
                  else if phase < 0.6 {&self.sprites.bird_3}
                  else {&self.sprites.bird_2}};
+                println!("draw_birds x: {} y: {} a: {}", bird.x, bird.y, bird.a);
                 self.window.draw_2d(&event, |c, g| {
                     let transform = c.transform.trans(
                         (128.0 + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
