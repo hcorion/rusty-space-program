@@ -89,10 +89,10 @@ impl Game {
 
             let mut alive = 0;
             // Unfortunately not as clean as the original
-            for index in 0..self.object_list.len()-1
+            for index in 0..self.object_list.len()
             {
                 gravity::grav(&mut self.object_list[index], DT);
-                for index2 in 0..self.object_list.len()-1 {
+                for index2 in 0..self.object_list.len() {
                     if self.object_list[index] == self.object_list[index2] ||
                        self.object_list[index].dead == true ||
                        self.object_list[index2].dead == true {

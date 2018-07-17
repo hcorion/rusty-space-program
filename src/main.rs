@@ -57,14 +57,13 @@ impl App {
                  else if phase < 0.4 {&self.sprites.bird_2}
                  else if phase < 0.6 {&self.sprites.bird_3}
                  else {&self.sprites.bird_2}};
-                println!("x: {} y: {} t: {} in draw_birds", bird.x, bird.y, time);
                 self.window.draw_2d(&event, |c, g| {
                     let transform = c.transform.trans(
                         (alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
                         (alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
                         .rot_rad(
                             utils::interpolate_angle(bird.a_prev, bird.a, alpha))
-                        .trans(-20.0, -20.0);
+                        .trans(108.0, 108.0);
 
                     image(whatbird, transform, g);
                 });
