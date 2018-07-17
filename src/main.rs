@@ -21,7 +21,8 @@ mod game;
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
     rotation: f64,   // Rotation for the square.
-    window: PistonWindow
+    window: PistonWindow,
+    background: G2dTexture
 }
 
 impl App {
@@ -35,7 +36,7 @@ impl App {
         let rotation = self.rotation;
         let (x, y) = ((args.width / 2) as f64,
                       (args.height / 2) as f64);
-        //draw_background(&mut self.window, event);
+        self.draw_background(event);
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             //clear(GREEN, gl);
@@ -53,46 +54,60 @@ impl App {
         // Rotate 2 radians per second.
         self.rotation += 2.0 * args.dt;
     }
+    
+    fn draw_background (&mut self, event: Event) {
+        let background = &self.background; 
+        self.window.set_lazy(true);
+        self.window.draw_2d(&event, |c, g| {
+            clear([1.0; 4], g);
+            image(background, c.transform, g);
+        });
+    }
+
 }
 
-fn draw_background (window: &mut PistonWindow, event: Event) {
-
+fn initialize_background (window: &mut PistonWindow) -> G2dTexture {
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
     let background = assets.join("bg.png");
-    let background: G2dTexture = Texture::from_path(
+    Texture::from_path(
         &mut window.factory,
         &background, Flip::None,
         &TextureSettings::new()
-    ).unwrap();
-    window.set_lazy(true);
-    window.draw_2d(&event, |c, g| {
-        clear([1.0; 4], g);
-        image(&background, c.transform, g);
-        });
+    ).unwrap()
 }
 
-fn main() {
+
+fn init_app () -> App {
     // Change this to OpenGL::V2_1 if not working.
     let opengl = OpenGL::V3_2;
 
-    // Create an Glutin window.
     let mut window: Window = WindowSettings::new(
-            "spinning-square",
-            [256, 256]
-        )
+        "Rusty-Flaps",
+        [256, 256]
+    )
         .opengl(opengl)
         .exit_on_esc(true)
         .build()
         .unwrap();
 
-
-    // Create a new game and run it.
     let mut app = App {
         gl: GlGraphics::new(opengl),
         rotation: 0.0,
-        window: window
+        background: initialize_background(&mut window),
+            window: window
     };
+    app
+}
+
+fn main() {
+
+    // Create an Glutin window.
+;
+
+
+    // Create a new game and run it.
+    let mut app = init_app();
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut app.window) {
