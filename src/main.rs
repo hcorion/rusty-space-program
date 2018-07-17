@@ -30,7 +30,8 @@ pub struct App {
 impl App {
     fn render(&mut self, _args: &RenderArgs, event: Event) {
         self.draw_background(event.clone());
-        self.draw_birds(event, 0, 1.0);
+        let dt = self.game.dt;
+        self.draw_birds(event, (precise_time_ns()/1000000) as f32 / 1000.0, dt/0.02+1.0);
     }
 
     fn update(&mut self, args: &UpdateArgs) {
@@ -48,7 +49,7 @@ impl App {
     }
 
     fn draw_birds
-        (&mut self, event: Event, time: u64, alpha: f32) {
+        (&mut self, event: Event, time: f32, alpha: f32) {
             for bird in self.game.object_list.iter() {
                 let whatbird = if bird.dead {&self.sprites.bird_x}
                 else
