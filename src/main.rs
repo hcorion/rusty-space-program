@@ -19,7 +19,7 @@ pub struct App {
 }
 
 impl App {
-    fn render(&mut self, args: &RenderArgs) {
+    fn render(&mut self, args: &RenderArgs, event: Event) {
         use graphics::*;
 
         const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
@@ -29,13 +29,11 @@ impl App {
         let rotation = self.rotation;
         let (x, y) = ((args.width / 2) as f64,
                       (args.height / 2) as f64);
-        println!("asdf");
-        draw_background(&mut self.window);
+        draw_background(&mut self.window, event);
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             //clear(GREEN, gl);
 
-            println!("qwert");
             let transform = c.transform.trans(x, y)
                                        .rot_rad(rotation)
                                        .trans(-25.0, -25.0);
@@ -51,7 +49,7 @@ impl App {
     }
 }
 
-fn draw_background (window: &mut PistonWindow) {
+fn draw_background (window: &mut PistonWindow, event: Event) {
 
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
@@ -62,7 +60,7 @@ fn draw_background (window: &mut PistonWindow) {
         &TextureSettings::new()
     ).unwrap();
     window.set_lazy(true);
-    window.draw_2d(&std::ptr::null, |c, g| {
+    window.draw_2d(&event, |c, g| {
         clear([1.0; 4], g);
         image(&background, c.transform, g);
         });
@@ -93,7 +91,7 @@ fn main() {
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut app.window) {
         if let Some(r) = e.render_args() {
-            app.render(&r);
+            app.render(&r, e.clone());
         }
 
         if let Some(u) = e.update_args() {
