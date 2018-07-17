@@ -8,7 +8,7 @@ pub fn grav(mut obj: &mut utils::Obj, dt: f32)
   obj.a_prev = obj.a;
 
   let d = utils::dist(obj.x, obj.y);
-  let f = utils::G*utils::M/d*d;
+  let f = utils::G*utils::M/(d*d);
   obj.f = f;
   let n_x = obj.x/d;
   let n_y = obj.y/d;
