@@ -25,7 +25,9 @@ pub struct Game {
     pub particles: Vec<Particle>,
     pub objectList: Vec<utils::Obj>,
     pub maxScore: u32,
-    pub newScore: bool
+    pub newScore: bool,
+    pub showHelp: bool,
+    pub push: u32
 }
 
 pub struct Sprites {
@@ -45,7 +47,9 @@ impl Game {
         particles: Vec::new(),
         objectList: Vec::new(),
         maxScore: 0,
-        newScore: false
+        newScore: false,
+        showHelp: true,
+        push: 0,
     }
 }
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
@@ -153,6 +157,19 @@ impl Game {
     pub fn bird(&mut self) -> &mut utils::Obj {
         let len = self.objectList.len()-1;
         return &mut self.objectList[len];
+    }
+
+    pub fn boost(&mut self) {
+        self.showHelp = false;
+        if !self.bird().boost {
+            // TODO play sound
+            self.push += 1;
+            if self.push >= 5 {
+                self.push = 0;
+            }
+            self.bird().boost = true;
+        }
+
     }
 
     // Otherwise known as stepParts
