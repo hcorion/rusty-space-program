@@ -6,7 +6,7 @@ use gravity;
 
 use piston_window::*;
 
-pub const flap: f32 = 0.16;
+pub const FLAP: f32 = 0.16;
 
 pub struct Particle {
     pub x: f32,
@@ -22,7 +22,6 @@ pub struct Game {
     pub dt: f32,
     // Old time
     pub oldT: u64,
-    pub bird: utils::Obj,
     pub particles: Vec<Particle>,
     pub objectList: Vec<utils::Obj>,
     pub maxScore: u32,
@@ -42,21 +41,21 @@ impl Game {
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
     pub fn run(&mut self, now: u64)
     {
-        if self.bird.boost
+        if self.bird().boost
         {
-            let d = ((self.bird.u*self.bird.u) + (self.bird.v*self.bird.v)).sqrt();
-            self.bird.u += self.bird.a.cos() * self.bird.f * flap;
-            self.bird.v += self.bird.a.sin() * self.bird.f * flap;
-            self.bird.t = 0;
-            self.bird.boost = false;
+            let d = ((self.bird().u*self.bird().u) + (self.bird().v*self.bird().v)).sqrt();
+            self.bird().u += self.bird().a.cos() * self.bird().f * FLAP;
+            self.bird().v += self.bird().a.sin() * self.bird().f * FLAP;
+            self.bird().t = 0;
+            self.bird().boost = false;
 
             for i in 0..9 {
-                let a: f32 = self.bird.a + ((0.5-random::<f32>())*0.25);
-                let U = self.bird.u - (a.cos() * 100.0 * (random::<f32>()+1.0));
-                let V = self.bird.v - (a.cos() * 100.0 * (random::<f32>()+1.0));
+                let a: f32 = self.bird().a + ((0.5-random::<f32>())*0.25);
+                let U = self.bird().u - (a.cos() * 100.0 * (random::<f32>()+1.0));
+                let V = self.bird().v - (a.cos() * 100.0 * (random::<f32>()+1.0));
 
-                let x1 = self.bird.x;
-                let y1 = self.bird.y;
+                let x1 = self.bird().x;
+                let y1 = self.bird().y;
                 self.add_particle(x1, y1,
                         U, V,
                         0.5+random::<f32>(), 
@@ -75,10 +74,10 @@ impl Game {
 
             let mut alive = 0;
             // Unfortunately not as clean as the original
-            for index in 0..self.objectList.len()
+            for index in 0..self.objectList.len()-1
             {
                 gravity::grav(&mut self.objectList[index], DT);
-                for index2 in 0..self.objectList.len() {
+                for index2 in 0..self.objectList.len()-1 {
                     if self.objectList[index] == self.objectList[index2] ||
                        self.objectList[index].dead == true ||
                        self.objectList[index2].dead == true {
@@ -101,8 +100,8 @@ impl Game {
 
             self.step_particles(DT);
         }
-        //if self.bird.t > 5 {
-        //    self.new_bird(&self.bird);
+        //if self.bird().t > 5 {
+        //    self.new_bird(&self.bird());
         //}
 
         // Drawing stuff!!!!
@@ -121,8 +120,8 @@ impl Game {
             );
     }
 
-    pub fn new_bird(&mut self, mut obj: &utils::Obj){
-        obj = &utils::Obj {
+    /*pub fn new_bird(&mut self){
+        return &mut utils::Obj {
             x: 0.0,
             y: -utils::R*1.25,
             u: 0.0, 
@@ -138,6 +137,10 @@ impl Game {
             f: 0.0,
 
         };
+    }*/
+    pub fn bird(&mut self) -> &mut utils::Obj {
+        let len = self.objectList.len()-1;
+        return &mut self.objectList[len];
     }
 
     // Otherwise known as stepParts
