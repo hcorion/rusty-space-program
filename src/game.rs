@@ -83,7 +83,7 @@ impl Game {
         self.oldT = now;
 
         let mut DT = 0.02;
-        while DT > 0.0 {
+        while self.dt > 0.0 {
             self.dt -= DT;
 
             let mut alive = 0;
@@ -135,8 +135,10 @@ impl Game {
     }
 
     pub fn new_bird(&mut self){
-        let len = self.objectList.len() -1;
-        self.objectList[len].is_bird = false;
+        match self.objectList.len() {
+            0 => (),
+            n => {self.objectList[n - 1].is_bird = false; ()}
+        }
         self.objectList.push(utils::Obj {
             x: 0.0,
             y: -utils::R*1.25,
@@ -184,7 +186,7 @@ impl Game {
                 particles_to_remove.push(p);
             }
         }*/
-        unimplemented!();
+        //unimplemented!();
 
     }
 
