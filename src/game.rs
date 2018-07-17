@@ -76,6 +76,7 @@ impl Game {
                         if random::<f32>() < 0.5 {true} else {false})
             }
         }
+
         if self.old_t == 0 {
             self.old_t = now;
         }
