@@ -79,7 +79,7 @@ impl Game {
         if self.old_t == 0 {
             self.old_t = now;
         }
-        self.dt += ((now - self.old_t) / 1000) as f32;
+        self.dt += ((now - self.old_t) as f32 / 1000.0);
         self.old_t = now;
 
         const DT: f32 = 0.02;
