@@ -59,11 +59,11 @@ impl App {
                  else {&self.sprites.bird_2}};
                 self.window.draw_2d(&event, |c, g| {
                     let transform = c.transform.trans(
-                        (alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
-                        (alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
+                        (128.0 + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
+                        (128.0 + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
                         .rot_rad(
                             utils::interpolate_angle(bird.a_prev, bird.a, alpha))
-                        .trans(108.0, 108.0);
+                        .trans(-20.0, -20.0);
 
                     image(whatbird, transform, g);
                 });

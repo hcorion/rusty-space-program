@@ -68,5 +68,5 @@ fn remove_obj(mut obj: &utils::Obj){
         toRemove.push(obj);
       }
   */
-    unimplemented!();
+    //unimplemented!();
 }
