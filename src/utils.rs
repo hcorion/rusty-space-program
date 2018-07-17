@@ -41,4 +41,14 @@ pub fn dist(x1: f32, y1: f32) -> f32 { (((x1*x1)+(y1*y1))).sqrt() }
     bird.aPrev = bird.a;
  */
 
-pub fn interpolate_angle(){}
+pub fn interpolate_angle(ang1: f32, ang2: f32, alpha: f32) -> f64 {
+    let da: f32 = (ang2 - ang1) % (2.0 * PI);
+    if da > PI {
+        let da = da - 2.0 * PI;
+    } else {
+        if da < -PI {
+            let da = da + 2.0 * PI;
+        }
+    }
+    (ang1 + alpha * da) as f64
+}
