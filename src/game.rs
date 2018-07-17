@@ -120,8 +120,8 @@ impl Game {
             );
     }
 
-    /*pub fn new_bird(&mut self){
-        return &mut utils::Obj {
+    pub fn new_bird(&mut self){
+        self.objectList.push(utils::Obj {
             x: 0.0,
             y: -utils::R*1.25,
             u: 0.0, 
@@ -136,8 +136,8 @@ impl Game {
             a_prev: -PI/2.0,
             f: 0.0,
 
-        };
-    }*/
+        });
+    }
     pub fn bird(&mut self) -> &mut utils::Obj {
         let len = self.objectList.len()-1;
         return &mut self.objectList[len];
