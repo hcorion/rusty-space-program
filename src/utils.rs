@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 #[derive(PartialEq)]
 pub struct Obj {
     pub x: f32,
@@ -36,4 +38,6 @@ pub fn dist(x1: f32, y1: f32) -> f32 { (((x1*x1)+(y1*y1))).sqrt() }
     bird.xPrev = bird.x;
     bird.yPrev = bird.y;
     bird.aPrev = bird.a;
-*/
+ */
+
+pub fn interpolate_angle(){}

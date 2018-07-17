@@ -3,6 +3,8 @@ use time::precise_time_ns;
 use rand::random;
 use gravity;
 
+use piston_window::*;
+
 pub const flap: f32 = 0.16;
 
 pub struct Particle {

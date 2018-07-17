@@ -64,19 +64,21 @@ impl App {
         });
     }
 
-    fn draw_bird(&mut self, event: Event, bird: Obj, time: i32, alpha: f32) {
-        let whatbird = if bird.dead self.sprites.bird_x
-        else
-        {let phase = time % 0.8;
-         if phase < 0.2 self.sprites.bird_1
-         else if phase < 0.4 self.sprites.bird_2
-         else if phase < 0.6 self.sprites.bird_3 else self.sprites.bird_2};
+    fn draw_bird
+        (&mut self, event: Event, bird: utils::Obj, time: i32, alpha: f32) {
+            let whatbird = if bird.dead {self.sprites.bird_x}
+            else
+            {let phase = time % 0.8;
+             if phase < 0.2 {self.sprites.bird_1}
+             else if phase < 0.4 {self.sprites.bird_2}
+             else if phase < 0.6 {self.sprites.bird_3}
+             else {self.sprites.bird_2}};
 
         self.window.draw_2d(&event, |c, g| {
             let transform = c.transform.trans(
                 alpha*bird.x + (1-alpha*bird.x_prev),
                 alpha*bird.y + (1-alpha*bird.y_prev))
-                .rot_rad(interpolate_angle(bird.a_prev, bird.a, alpha))
+                .rot_rad(utils::interpolate_angle(bird.a_prev, bird.a, alpha))
                 .trans(-20.0, -20.0);
 
             image(whatbird, transform, g);
@@ -117,7 +119,7 @@ fn init_app () -> App {
         bird_x: initialize_texture(&mut window, "bird-x.png"),
         particle_1: initialize_texture(&mut window, "particle-1.png"),
         particle_2: initialize_texture(&mut window, "particle-2.png")
-    }
+    };
 
     let mut app = App {
         gl: GlGraphics::new(opengl),
