@@ -3,6 +3,8 @@ extern crate graphics;
 extern crate piston_window;
 extern crate opengl_graphics;
 extern crate find_folder;
+extern crate rand;
+extern crate time;
 
 use piston::window::WindowSettings;
 use piston::event_loop::*;
@@ -11,6 +13,10 @@ use piston_window::PistonWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
 use piston_window::*;
+
+mod utils;
+mod gravity;
+mod game;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
@@ -29,7 +35,7 @@ impl App {
         let rotation = self.rotation;
         let (x, y) = ((args.width / 2) as f64,
                       (args.height / 2) as f64);
-        draw_background(&mut self.window, event);
+        //draw_background(&mut self.window, event);
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             //clear(GREEN, gl);
