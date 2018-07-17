@@ -126,10 +126,14 @@ fn main() {
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut app.window) {
         app.game.run(precise_time_ns()/1000000);
+        if let Some(Button::Keyboard(key)) = e.press_args() {
+            if key == Key::Space {
+                app.game.boost();
+            }
+        }
         if let Some(r) = e.render_args() {
             app.render(&r, e);
         } else {
-
         if let Some(u) = e.update_args() {
             app.update(&u);
         }}
