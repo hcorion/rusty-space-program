@@ -38,9 +38,8 @@ impl App {
         let rotation = self.rotation;
         let (x, y) = ((args.width / 2) as f64,
                       (args.height / 2) as f64);
-        self.draw_background(event);
-        //self.draw_bird(event,
-        //game::new_bu)
+        self.draw_background(event.clone());
+        self.draw_birds(event, 13, 0.5);
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             //clear(GREEN, gl);
@@ -68,27 +67,28 @@ impl App {
         });
     }
 
-    fn draw_bird
-        (&mut self, event: Event, bird: utils::Obj, time: i32, alpha: f32) {
-            let whatbird = if bird.dead {&self.sprites.bird_x}
-            else
-            {let phase = time as f32 % 0.8;
-             if phase < 0.2 {&self.sprites.bird_1}
-             else if phase < 0.4 {&self.sprites.bird_2}
-             else if phase < 0.6 {&self.sprites.bird_3}
-             else {&self.sprites.bird_2}};
+    fn draw_birds
+        (&mut self, event: Event, time: u64, alpha: f32) {
+            for bird in self.game.objectList.iter() {
+                let whatbird = if bird.dead {&self.sprites.bird_x}
+                else
+                {let phase = time as f32 % 0.8;
+                 if phase < 0.2 {&self.sprites.bird_1}
+                 else if phase < 0.4 {&self.sprites.bird_2}
+                 else if phase < 0.6 {&self.sprites.bird_3}
+                 else {&self.sprites.bird_2}};
 
-        self.window.draw_2d(&event, |c, g| {
-            let transform = c.transform.trans(
-                (alpha*bird.x + (1.0-alpha*bird.x_prev)).into(),
-                (alpha*bird.y + (1.0-alpha*bird.y_prev)).into())
-                .rot_rad(utils::interpolate_angle(bird.a_prev, bird.a, alpha))
-                .trans(-20.0, -20.0);
+                self.window.draw_2d(&event, |c, g| {
+                    let transform = c.transform.trans(
+                        (alpha*bird.x + (1.0-alpha*bird.x_prev)).into(),
+                        (alpha*bird.y + (1.0-alpha*bird.y_prev)).into())
+                        .rot_rad(
+                            utils::interpolate_angle(bird.a_prev, bird.a, alpha))
+                        .trans(-20.0, -20.0);
 
-            image(whatbird, transform, g);
-        });
-    }
-
+                    image(whatbird, transform, g);
+                });
+            }}
 }
 
 fn initialize_texture (window: &mut PistonWindow, fname: &str) -> G2dTexture {
@@ -140,6 +140,7 @@ fn init_app () -> App {
             newScore: false
         }
     };
+    app.game.new_bird();
     app
 }
 
