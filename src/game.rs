@@ -1,5 +1,6 @@
 use utils;
 use time::precise_time_ns;
+use std::f32::consts::PI;
 use rand::random;
 use gravity;
 
@@ -24,6 +25,8 @@ pub struct Game {
     pub bird: utils::Obj,
     pub particles: Vec<Particle>,
     pub objectList: Vec<utils::Obj>,
+    pub maxScore: u32,
+    pub newScore: bool
 }
 
 pub struct Sprites {
@@ -71,21 +74,38 @@ impl Game {
             self.dt -= DT;
 
             let mut alive = 0;
-            /*for obj in self.objectList.iter_mut() {
-                gravity::grav(obj, DT);
-                for obj2 in self.objectList.iter() {
-                    if *obj == *obj2 || obj.dead == true || obj2.dead == true{
+            // Unfortunately not as clean as the original
+            for index in 0..self.objectList.len()
+            {
+                gravity::grav(&mut self.objectList[index], DT);
+                for index2 in 0..self.objectList.len() {
+                    if self.objectList[index] == self.objectList[index2] ||
+                       self.objectList[index].dead == true ||
+                       self.objectList[index2].dead == true {
                         return;
                     }
-                    let d = utils::dist(obj.x - obj2.x, obj.y - obj2.y);
+                    let d = utils::dist(self.objectList[index].x - self.objectList[index2].x, 
+                            self.objectList[index].y - self.objectList[index2].y);
                     if d < 20.0 {
-                        gravity::kill_bird(obj);
-                        gravity::kill_bird(obj2);
+                        gravity::kill_bird(&self.objectList[index]);
+                        gravity::kill_bird(&self.objectList[index2]);
                     }
-                }
-            }*/
 
+                }
+                if !self.objectList[index].dead && !self.objectList[index].is_bird {
+                    alive += 1;
+                }
+
+                // TODO: Remove things
+            }
+
+            self.step_particles(DT);
         }
+        //if self.bird.t > 5 {
+        //    self.new_bird(&self.bird);
+        //}
+
+        // Drawing stuff!!!!
 
     }
     // Also known as addPart
@@ -99,6 +119,41 @@ impl Game {
                 t: t, 
                 isBig: isBig}
             );
+    }
+
+    pub fn new_bird(&mut self, mut obj: &utils::Obj){
+        obj = &utils::Obj {
+            x: 0.0,
+            y: -utils::R*1.25,
+            u: 0.0, 
+            v: 0.0, 
+            a: -PI/2.0,
+            t: 0,
+            boost: true,
+            dead: false,
+            is_bird: true,
+            x_prev: 0.0,
+            y_prev: -utils::R*1.25,
+            a_prev: -PI/2.0,
+            f: 0.0,
+
+        };
+    }
+
+    // Otherwise known as stepParts
+    pub fn step_particles(&mut self, dt: f32) {
+        // TODO
+        /*let mut particles_to_remove Vec<utils::Obj>;
+        for p in self.parts.iter_mut() {
+            p.x += p.u * dt;
+            p.y += p.v * dt;
+            p.t -= dt;
+            if p.t < 0 {
+                particles_to_remove.push(p);
+            }
+        }*/
+        unimplemented!();
+
     }
 
 }

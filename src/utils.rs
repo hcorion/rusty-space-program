@@ -13,6 +13,7 @@ pub struct Obj {
     pub f: f32,
     pub boost: bool,
     pub dead: bool,
+    pub is_bird: bool,
     pub x_prev: f32,
     pub y_prev: f32,
     pub a_prev: f32,
