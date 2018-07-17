@@ -91,11 +91,11 @@ fn main() {
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut app.window) {
         if let Some(r) = e.render_args() {
-            app.render(&r, e.clone());
-        }
+            app.render(&r, e);
+        } else {
 
         if let Some(u) = e.update_args() {
             app.update(&u);
-        }
+        }}
     }
 }
