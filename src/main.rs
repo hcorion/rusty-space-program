@@ -11,6 +11,7 @@ use piston::event_loop::*;
 use piston::input::*;
 use piston_window::PistonWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
+use time::precise_time_ns;
 
 use piston_window::*;
 
@@ -131,15 +132,9 @@ fn init_app () -> App {
         background: initialize_texture(&mut window, "bg.png"),
         window: window,
         sprites: sprites,
-        game: game::Game {
-            dt: 0.0,
-            oldT: 0,
-            particles: vec![],
-            objectList: vec![],
-            maxScore: 0,
-            newScore: false
-        }
+        game: game::Game::new()
     };
+    //FIXME: Should happen somewhere else
     app.game.new_bird();
     app
 }
@@ -151,6 +146,7 @@ fn main() {
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut app.window) {
+        app.game.run(precise_time_ns()/1000000);
         if let Some(r) = e.render_args() {
             app.render(&r, e);
         } else {
