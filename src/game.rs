@@ -79,7 +79,7 @@ impl Game {
         self.oldT = now;
 
         let mut DT = 0.02;
-        while DT > 0.0 {
+        while self.dt > 0.0 {
             self.dt -= DT;
 
             let mut alive = 0;
