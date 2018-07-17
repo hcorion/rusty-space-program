@@ -21,31 +21,31 @@ pub fn grav(mut obj: &mut utils::Obj, dt: f32)
     obj.a += (10.0*dt) as f32;
   }
   else {
-    let A = obj.y.atan2(obj.x);
+    let aa = obj.y.atan2(obj.x);
     if d < 200.0 {
-      obj.a = A + (PI/2.0) * (d-100.0/100.0);
+      obj.a = aa + (PI/2.0) * (d-100.0/100.0);
     }
     else {
-      obj.a = A + (PI/2.0);
+      obj.a = aa + (PI/2.0);
     }
   }
-  let X = obj.x + obj.u * dt as f32;
-  let Y = obj.y + obj.v * dt as f32;
-  let D = utils::dist(X, Y);
-  if D > utils::R {
-    obj.x = X;
-    obj.y = Y;
+  let xx = obj.x + obj.u * dt as f32;
+  let yy = obj.y + obj.v * dt as f32;
+  let dd = utils::dist(xx, yy);
+  if dd > utils::R {
+    obj.x = xx;
+    obj.y = yy;
 
     obj.t += dt.round() as u64;
     
-    if D > 400.0 && !obj.dead { // kill if out of range
+    if dd > 400.0 && !obj.dead { // kill if out of range
         kill_bird(obj);
       }
   }
   else {
     // Colliding
-    obj.x = utils::R*X/D;
-    obj.y = utils::R*Y/D;
+    obj.x = utils::R*xx/dd;
+    obj.y = utils::R*yy/dd;
     obj.u = 0.0;
     obj.v = 0.0;
 

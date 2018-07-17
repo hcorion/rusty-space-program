@@ -10,7 +10,6 @@ use piston::window::WindowSettings;
 use piston::event_loop::*;
 use piston::input::*;
 use piston_window::PistonWindow as Window;
-use opengl_graphics::{ GlGraphics, OpenGL };
 use time::precise_time_ns;
 
 use piston_window::*;
@@ -20,7 +19,7 @@ mod gravity;
 mod game;
 
 pub struct App {
-    gl: GlGraphics, // OpenGL drawing backend.
+   // gl: GlGraphics, // OpenGL drawing backend.
     rotation: f64,   // Rotation for the square.
     window: PistonWindow,
     sprites: game::Sprites,
@@ -29,8 +28,7 @@ pub struct App {
 }
 
 impl App {
-    fn render(&mut self, args: &RenderArgs, event: Event) {
-        use graphics::*;
+    fn render(&mut self, _args: &RenderArgs, event: Event) {
 
         self.draw_background(event.clone());
         self.draw_birds(event, 13, 0.5);
@@ -52,7 +50,7 @@ impl App {
 
     fn draw_birds
         (&mut self, event: Event, time: u64, alpha: f32) {
-            for bird in self.game.objectList.iter() {
+            for bird in self.game.object_list.iter() {
                 let whatbird = if bird.dead {&self.sprites.bird_x}
                 else
                 {let phase = time as f32 % 0.8;
@@ -109,7 +107,7 @@ fn init_app () -> App {
     };
 
     let mut app = App {
-        gl: GlGraphics::new(opengl),
+        //gl: GlGraphics::new(opengl),
         rotation: 0.0,
         background: initialize_texture(&mut window, "bg.png"),
         window: window,

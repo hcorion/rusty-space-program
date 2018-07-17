@@ -14,19 +14,19 @@ pub struct Particle {
     pub u: f32,
     pub v: f32,
     pub t: f32,
-    pub isBig: bool
+    pub is_big: bool
 }
 
 pub struct Game {
     // Something to do with time
     pub dt: f32,
     // Old time
-    pub oldT: u64,
+    pub old_t: u64,
     pub particles: Vec<Particle>,
-    pub objectList: Vec<utils::Obj>,
-    pub maxScore: u32,
-    pub newScore: bool,
-    pub showHelp: bool,
+    pub object_list: Vec<utils::Obj>,
+    pub max_score: u32,
+    pub new_score: bool,
+    pub show_help: bool,
     pub push: u32
 }
 
@@ -43,12 +43,12 @@ impl Game {
     pub fn new() -> Game {
     Game {
         dt: 0.0,
-        oldT: 0,
+        old_t: 0,
         particles: Vec::new(),
-        objectList: Vec::new(),
-        maxScore: 0,
-        newScore: false,
-        showHelp: true,
+        object_list: Vec::new(),
+        max_score: 0,
+        new_score: false,
+        show_help: true,
         push: 0,
     }
 }
@@ -65,47 +65,47 @@ impl Game {
 
             for i in 0..9 {
                 let a: f32 = self.bird().a + ((0.5-random::<f32>())*0.25);
-                let U = self.bird().u - (a.cos() * 100.0 * (random::<f32>()+1.0));
-                let V = self.bird().v - (a.cos() * 100.0 * (random::<f32>()+1.0));
+                let u = self.bird().u - (a.cos() * 100.0 * (random::<f32>()+1.0));
+                let v = self.bird().v - (a.cos() * 100.0 * (random::<f32>()+1.0));
 
                 let x1 = self.bird().x;
                 let y1 = self.bird().y;
                 self.add_particle(x1, y1,
-                        U, V,
+                        u, v,
                         0.5+random::<f32>(), 
                         if random::<f32>() < 0.5 {true} else {false})
             }
         }
-        if self.oldT == 0 {
-            self.oldT = now;
+        if self.old_t == 0 {
+            self.old_t = now;
         }
-        self.dt += ((now - self.oldT) / 1000) as f32;
-        self.oldT = now;
+        self.dt += ((now - self.old_t) / 1000) as f32;
+        self.old_t = now;
 
-        let mut DT = 0.02;
+        const DT: f32 = 0.02;
         while self.dt > 0.0 {
             self.dt -= DT;
 
             let mut alive = 0;
             // Unfortunately not as clean as the original
-            for index in 0..self.objectList.len()-1
+            for index in 0..self.object_list.len()-1
             {
-                gravity::grav(&mut self.objectList[index], DT);
-                for index2 in 0..self.objectList.len()-1 {
-                    if self.objectList[index] == self.objectList[index2] ||
-                       self.objectList[index].dead == true ||
-                       self.objectList[index2].dead == true {
+                gravity::grav(&mut self.object_list[index], DT);
+                for index2 in 0..self.object_list.len()-1 {
+                    if self.object_list[index] == self.object_list[index2] ||
+                       self.object_list[index].dead == true ||
+                       self.object_list[index2].dead == true {
                         return;
                     }
-                    let d = utils::dist(self.objectList[index].x - self.objectList[index2].x, 
-                            self.objectList[index].y - self.objectList[index2].y);
+                    let d = utils::dist(self.object_list[index].x - self.object_list[index2].x, 
+                            self.object_list[index].y - self.object_list[index2].y);
                     if d < 20.0 {
-                        gravity::kill_bird(&self.objectList[index]);
-                        gravity::kill_bird(&self.objectList[index2]);
+                        gravity::kill_bird(&self.object_list[index]);
+                        gravity::kill_bird(&self.object_list[index2]);
                     }
 
                 }
-                if !self.objectList[index].dead && !self.objectList[index].is_bird {
+                if !self.object_list[index].dead && !self.object_list[index].is_bird {
                     alive += 1;
                 }
 
@@ -122,7 +122,7 @@ impl Game {
 
     }
     // Also known as addPart
-    pub fn add_particle(&mut self, x: f32, y: f32, u: f32, v: f32, t: f32, isBig: bool){
+    pub fn add_particle(&mut self, x: f32, y: f32, u: f32, v: f32, t: f32, is_big: bool){
         self.particles.push(
             Particle {
                 x: x, 
@@ -130,16 +130,16 @@ impl Game {
                 u: u, 
                 v: v, 
                 t: t, 
-                isBig: isBig}
+                is_big: is_big}
             );
     }
 
     pub fn new_bird(&mut self){
-        match self.objectList.len() {
+        match self.object_list.len() {
             0 => (),
-            n => {self.objectList[n - 1].is_bird = false; ()}
+            n => {self.object_list[n - 1].is_bird = false; ()}
         }
-        self.objectList.push(utils::Obj {
+        self.object_list.push(utils::Obj {
             x: 0.0,
             y: -utils::R*1.25,
             u: 0.0, 
@@ -157,12 +157,12 @@ impl Game {
         });
     }
     pub fn bird(&mut self) -> &mut utils::Obj {
-        let len = self.objectList.len()-1;
-        return &mut self.objectList[len];
+        let len = self.object_list.len()-1;
+        return &mut self.object_list[len];
     }
 
     pub fn boost(&mut self) {
-        self.showHelp = false;
+        self.show_help = false;
         if !self.bird().boost {
             // TODO play sound
             self.push += 1;
