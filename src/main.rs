@@ -61,7 +61,7 @@ impl App {
             else {&self.sprites.particle_2};
             self.window.draw_2d(&event, |c, g| {
                 let transform = c.transform.rot_rad(n as f64 * (PI * 2.0 / q2) as f64)
-                    .trans(xcenter, 0.0)
+                    .trans(400.0, 0.0)
                     .rot_rad(-n as f64 * (PI * 2.0 / q2) as f64)
                     .trans(xcenter, ycenter)
                     .scale(2.0, 2.0);
@@ -144,7 +144,7 @@ fn init_app () -> App {
 
     let mut window: Window = WindowSettings::new(
         "Rusty Flaps",
-        [800, 800]
+        [900, 900]
     )
         .opengl(opengl)
         .exit_on_esc(true)
