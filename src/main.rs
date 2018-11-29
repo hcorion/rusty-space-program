@@ -79,7 +79,7 @@ fn initialize_texture (window: &mut PistonWindow, fname: &str) -> G2dTexture {
     Texture::from_path(
         &mut window.factory,
         &background, Flip::None,
-        &TextureSettings::new()
+        &TextureSettings::new().filter(texture::Filter::Nearest)
     ).unwrap()
 }
 
