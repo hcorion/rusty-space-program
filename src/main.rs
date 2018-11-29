@@ -20,6 +20,8 @@ use piston_window::*;
 mod utils;
 mod game;
 
+use std::f32::consts::PI;
+
 pub struct App {
    // gl: GlGraphics, // OpenGL drawing backend.
     rotation: f64,   // Rotation for the square.
@@ -32,6 +34,7 @@ pub struct App {
 impl App {
     fn render(&mut self, _args: &RenderArgs, event: Event) {
         self.draw_background(event.clone());
+        self.draw_limit(event.clone());
         let dt = self.game.dt;
         self.draw_particles(event.clone(), dt);
         self.draw_birds(event, (precise_time_ns()/1000000) as f32 / 1000.0, dt/0.02+1.0);
@@ -48,6 +51,26 @@ impl App {
 
     fn y_center (&self) -> f32 {
         return (self.window.size().height / 2) as f32;
+    }
+
+    fn draw_limit (&mut self, event: Event) {
+        let quantity = 50;
+        let q2 = 50.0;
+        let xcenter = self.x_center() as f64;
+        let ycenter = self.y_center() as f64;
+        for n in 0..quantity {
+            let whatpart = if n % 2 == 0 {&self.sprites.particle_1}
+            else {&self.sprites.particle_2};
+            self.window.draw_2d(&event, |c, g| {
+                let transform = c.transform.rot_rad(n as f64 * (PI * 2.0 / q2) as f64)
+                    .trans(400.0, 0.0)
+                    .rot_rad(-n as f64 * (PI * 2.0 / q2) as f64)
+                    .trans(xcenter, ycenter)
+                    .scale(2.0, 2.0);
+
+                image(whatpart, transform, g);
+            });
+        }
     }
 
     fn draw_background (&mut self, event: Event) {
@@ -95,8 +118,7 @@ impl App {
                     let transform = c.transform.trans(
                         (xcenter + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
                         (ycenter + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
-                        .rot_rad(
-                            utils::interpolate_angle(bird.a_prev, bird.a, alpha))
+                        .rot_rad(utils::interpolate_angle(bird.a_prev, bird.a, alpha))
                         .trans(-20.0, -20.0)
                         .scale(2.0, 2.0);
 
@@ -123,7 +145,7 @@ fn init_app () -> App {
 
     let mut window: Window = WindowSettings::new(
         "Rusty Flaps",
-        [800, 800]
+        [900, 900]
     )
         .opengl(opengl)
         .exit_on_esc(true)
@@ -136,7 +158,27 @@ fn init_app () -> App {
         bird_3: initialize_texture(&mut window, "bird-3.png"),
         bird_x: initialize_texture(&mut window, "bird-x.png"),
         particle_1: initialize_texture(&mut window, "particle-1.png"),
-        particle_2: initialize_texture(&mut window, "particle-2.png")
+        particle_2: initialize_texture(&mut window, "particle-2.png"),
+        arrow: initialize_texture(&mut window, "arrow.png"),
+        logo: initialize_texture(&mut window, "logo.png"),
+        medal_bronze: initialize_texture(&mut window, "medal-bronze.png"),
+        medal_gold: initialize_texture(&mut window, "medal-gold.png"),
+        medal_platinum: initialize_texture(&mut window, "medal-platinum.png"),
+        medal_silver: initialize_texture(&mut window, "medal-silver.png"),
+        new: initialize_texture(&mut window, "new.png"),
+        number_0: initialize_texture(&mut window, "number-0.png"),
+        number_1: initialize_texture(&mut window, "number-1.png"),
+        number_2: initialize_texture(&mut window, "number-2.png"),
+        number_3: initialize_texture(&mut window, "number-3.png"),
+        number_4: initialize_texture(&mut window, "number-4.png"),
+        number_5: initialize_texture(&mut window, "number-5.png"),
+        number_6: initialize_texture(&mut window, "number-6.png"),
+        number_7: initialize_texture(&mut window, "number-7.png"),
+        number_8: initialize_texture(&mut window, "number-8.png"),
+        number_9: initialize_texture(&mut window, "number-9.png"),
+        scoreboard: initialize_texture(&mut window, "scoreboard.png"),
+        tap: initialize_texture(&mut window, "tap.png"),
+        tap_top: initialize_texture(&mut window, "tap-top.png")
     };
 
     let mut app = App {

@@ -28,13 +28,13 @@ pub const R: f32 = 100.0;
 // Distance away from 0,0
 pub fn dist(x1: f32, y1: f32) -> f32 { (((x1*x1)+(y1*y1))).sqrt() }
 
-pub fn interpolate_angle(ang1: f32, ang2: f32, alpha: f32) -> f64 {
-    let da: f32 = (ang2 - ang1) % (2.0 * PI);
+pub fn interpolate_angle(ang2: f32, ang1: f32, alpha: f32) -> f64 {
+    let mut da: f32 = (ang2 - ang1) % (2.0 * PI);
     if da > PI {
-        let da = da - 2.0 * PI;
+        da = da - 2.0 * PI;
     } else {
         if da < -PI {
-            let da = da + 2.0 * PI;
+            da = da + 2.0 * PI;
         }
     }
     (ang1 + alpha * da) as f64

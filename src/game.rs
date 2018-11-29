@@ -57,7 +57,27 @@ pub struct Sprites {
     pub bird_3: G2dTexture,
     pub bird_x: G2dTexture,
     pub particle_1: G2dTexture,
-    pub particle_2: G2dTexture
+    pub particle_2: G2dTexture,
+    pub arrow: G2dTexture,
+    pub logo: G2dTexture,
+    pub medal_bronze: G2dTexture,
+    pub medal_gold: G2dTexture,
+    pub medal_platinum: G2dTexture,
+    pub medal_silver: G2dTexture,
+    pub new: G2dTexture,
+    pub number_0: G2dTexture,
+    pub number_1: G2dTexture,
+    pub number_2: G2dTexture,
+    pub number_3: G2dTexture,
+    pub number_4: G2dTexture,
+    pub number_5: G2dTexture,
+    pub number_6: G2dTexture,
+    pub number_7: G2dTexture,
+    pub number_8: G2dTexture,
+    pub number_9: G2dTexture,
+    pub scoreboard: G2dTexture,
+    pub tap: G2dTexture,
+    pub tap_top: G2dTexture
 }
 
 impl Game {
@@ -117,7 +137,7 @@ impl Game {
             for i in 0..9 {
                 let a: f32 = self.bird().a + ((0.5-random::<f32>())*0.25);
                 let u = self.bird().u - (a.cos() * 100.0 * (random::<f32>()+1.0));
-                let v = self.bird().v - (a.cos() * 100.0 * (random::<f32>()+1.0));
+                let v = self.bird().v - (a.sin() * 100.0 * (random::<f32>()+1.0));
 
                 let x1 = self.bird().x;
                 let y1 = self.bird().y;
