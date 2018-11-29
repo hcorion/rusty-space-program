@@ -95,7 +95,7 @@ impl Game {
 
             let mut alive = 0;
             // Unfortunately not as clean as the original
-            for index in 0..self.object_list.len()
+            for index in (0..self.object_list.len()).rev()
             {
                 gravity::grav(&mut self.object_list[index], DT);
                 for index2 in 0..self.object_list.len() {
@@ -116,11 +116,9 @@ impl Game {
                     alive += 1;
                 }
 
-                // TODO: Remove things
-            }
-            for i in (0..self.object_list.len()).rev() {
-                if self.object_list[i].remove_me {
-                    self.object_list.remove(i);
+                // Remove dead objects that have fallen to earth
+                if self.object_list[index].remove_me {
+                    self.object_list.remove(index);
                 }
             }
 
