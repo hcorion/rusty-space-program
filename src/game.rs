@@ -151,7 +151,7 @@ impl Game {
             v: 0.0,
             a: -PI/2.0,
             t: 0.0,
-            boost: true,
+            boost: false,
             dead: false,
             is_bird: true,
             x_prev: 0.0,
