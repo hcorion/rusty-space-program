@@ -2,6 +2,7 @@ use utils;
 use time::precise_time_ns;
 use std::f32::consts::PI;
 use rand::random;
+use music;
 
 use piston_window::*;
 
@@ -26,7 +27,28 @@ pub struct Game {
     pub max_score: u32,
     pub new_score: bool,
     pub show_help: bool,
-    pub push: u32
+    pub push: u32,
+    pub sound_sending: SoundSending,
+}
+
+#[derive(Copy, Clone, Hash, PartialEq, Eq)]
+pub enum Music {}
+
+#[derive(Copy, Clone, Hash, PartialEq, Eq)]
+pub enum Sound {
+    Boom,
+    Gain, 
+    Medal, 
+    Push,
+}
+
+pub struct SoundSending {
+    pub boom: bool, 
+    pub boom_timer: f32,
+    pub gain: bool, 
+    pub medal: bool, 
+    pub push: bool,
+    pub push_timer: f32,
 }
 
 pub struct Sprites {
@@ -40,7 +62,7 @@ pub struct Sprites {
 
 impl Game {
     pub fn new() -> Game {
-        Game {
+        let mut result = Game {
             dt: 0.0,
             old_t: 0,
             particles: Vec::new(),
@@ -49,6 +71,36 @@ impl Game {
             new_score: false,
             show_help: true,
             push: 0,
+            sound_sending: SoundSending{boom: false, boom_timer: 4.0, 
+                                        gain: false,
+                                        medal: false,
+                                        push: false, push_timer: 4.0}
+        };
+        result.new_bird();
+        return result;
+    }
+
+    pub fn music_handler(&mut self, dt: f32)
+    {
+        self.sound_sending.boom_timer += dt + 0.02;
+        self.sound_sending.push_timer += dt + 0.02;
+        if self.sound_sending.boom
+        {
+            self.sound_sending.boom = false;
+            if self.sound_sending.boom_timer > 1.10
+            {
+                self.sound_sending.boom_timer = 0.0;
+                music::play_sound(&Sound::Boom, music::Repeat::Times(0), music::MAX_VOLUME);
+            }
+        }
+        if self.sound_sending.push
+        {
+            self.sound_sending.push = false;
+            if self.sound_sending.push_timer > 0.40
+            {
+                self.sound_sending.push_timer = 0.0;
+                music::play_sound(&Sound::Push, music::Repeat::Times(0), music::MAX_VOLUME);
+            }
         }
     }
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
@@ -81,6 +133,8 @@ impl Game {
         }
         self.dt += ((now - self.old_t) as f32 / 1000.0);
         self.old_t = now;
+        let musicdt = self.dt;
+        self.music_handler(musicdt);
 
         const DT: f32 = 0.02;
         while self.dt > 0.0 {
@@ -170,7 +224,9 @@ impl Game {
     pub fn boost(&mut self) {
         self.show_help = false;
         if !self.bird().boost {
-            // TODO play sound
+
+            self.sound_sending.push = true;
+
             self.push += 1;
             if self.push >= 5 {
                 self.push = 0;
@@ -250,8 +306,8 @@ impl Game {
 
     pub fn kill_bird(&mut self, index: usize)
     {
-        // TODO play sound
-        //let obj = &mut self.object_list[index];
+        self.sound_sending.boom = true;
+        
         self.object_list[index].dead = true;
         self.object_list[index].u /= 10.0;
         self.object_list[index].v /= 10.0;
