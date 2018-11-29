@@ -31,6 +31,7 @@ impl App {
     fn render(&mut self, _args: &RenderArgs, event: Event) {
         self.draw_background(event.clone());
         let dt = self.game.dt;
+        self.draw_particles(event.clone(), dt);
         self.draw_birds(event, (precise_time_ns()/1000000) as f32 / 1000.0, dt/0.02+1.0);
     }
 
@@ -44,8 +45,23 @@ impl App {
         self.window.set_lazy(true);
         self.window.draw_2d(&event, |c, g| {
             clear([0.296875, 0.5234375, 0.546875, 1.0], g);
-            image(background, c.transform.trans(400.0 - 128.0, 400.0 - 128.0), g);
+            image(background, c.transform.trans(400.0 - 256.0, 400.0 - 256.0).scale(2.0, 2.0), g);
         });
+    }
+
+    fn draw_particles (&mut self, event: Event, time: f32) {
+        for pcl in self.game.particles.iter() {
+            let whatpart = if pcl.is_big {&self.sprites.particle_1}
+            else {&self.sprites.particle_2};
+            self.window.draw_2d(&event, |c, g| {
+                let transform = c.transform.trans(
+                    (400.0 + pcl.x + pcl.u * time).into(),
+                    (400.0 + pcl.y + pcl.v * time).into())
+                    .scale(2.0, 2.0);
+
+                image(whatpart, transform, g);
+            });
+        }
     }
 
     fn draw_birds
@@ -65,7 +81,8 @@ impl App {
                         (400.0 + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
                         .rot_rad(
                             utils::interpolate_angle(bird.a_prev, bird.a, alpha))
-                        .trans(-20.0, -20.0);
+                        .trans(-20.0, -20.0)
+                        .scale(2.0, 2.0);
 
                     image(whatbird, transform, g);
                 });
