@@ -134,11 +134,11 @@ impl Game {
     pub fn add_particle(&mut self, x: f32, y: f32, u: f32, v: f32, t: f32, is_big: bool){
         self.particles.push(
             Particle {
-                x: x, 
-                y: y, 
-                u: u, 
-                v: v, 
-                t: t, 
+                x: x,
+                y: y,
+                u: u,
+                v: v,
+                t: t,
                 is_big: is_big}
             );
     }
@@ -151,8 +151,8 @@ impl Game {
         self.object_list.push(utils::Obj {
             x: 0.0,
             y: -utils::R*1.25,
-            u: 0.0, 
-            v: 0.0, 
+            u: 0.0,
+            v: 0.0,
             a: -PI/2.0,
             t: 0.0,
             boost: true,
@@ -187,20 +187,13 @@ impl Game {
 
     // Otherwise known as stepParts
     pub fn step_particles(&mut self, dt: f32) {
-        // TODO
-        /*let mut particles_to_remove Vec<utils::Obj>;
-        for p in self.parts.iter_mut() {
+        for p in self.particles.iter_mut() {
+            p.t -= dt;
             p.x += p.u * dt;
             p.y += p.v * dt;
-            p.t -= dt;
-            if p.t < 0 {
-                particles_to_remove.push(p);
-            }
-        }*/
-        //unimplemented!();
-
+        }
+        self.particles.retain(|ref x| x.t >= 0.0);
     }
-
 }
 
 pub fn grav(mut obj: &mut utils::Obj, dt: f32)
