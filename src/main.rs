@@ -5,6 +5,8 @@ extern crate opengl_graphics;
 extern crate find_folder;
 extern crate rand;
 extern crate time;
+// Music
+extern crate music;
 
 use piston::window::WindowSettings;
 use piston::event_loop::*;
@@ -189,8 +191,6 @@ fn init_app () -> App {
         sprites: sprites,
         game: game::Game::new()
     };
-    //FIXME: Should happen somewhere else
-    app.game.new_bird();
     app
 }
 
@@ -200,18 +200,27 @@ fn main() {
     let mut app = init_app();
 
     let mut events = Events::new(EventSettings::new());
-    while let Some(e) = events.next(&mut app.window) {
-        app.game.run(precise_time_ns()/1000000);
-        if let Some(Button::Keyboard(key)) = e.press_args() {
-            if key == Key::Space {
-                app.game.boost();
+    music::start::<game::Music, game::Sound, _>(16, || {
+        music::bind_sound_file(game::Sound::Boom, "./assets/boom.ogg");
+        music::bind_sound_file(game::Sound::Gain, "./assets/gain.ogg");
+        music::bind_sound_file(game::Sound::Medal, "./assets/medal.ogg");
+        music::bind_sound_file(game::Sound::Push, "./assets/push.ogg");
+
+        music::set_volume(music::MAX_VOLUME);
+        
+        while let Some(e) = events.next(&mut app.window) {
+            app.game.run(precise_time_ns()/1000000);
+            if let Some(Button::Keyboard(key)) = e.press_args() {
+                if key == Key::Space {
+                    app.game.boost();
+                }
             }
+            if let Some(r) = e.render_args() {
+                app.render(&r, e);
+            } else {
+            if let Some(u) = e.update_args() {
+                app.update(&u);
+            }}
         }
-        if let Some(r) = e.render_args() {
-            app.render(&r, e);
-        } else {
-        if let Some(u) = e.update_args() {
-            app.update(&u);
-        }}
-    }
+    });
 }
