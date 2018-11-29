@@ -55,12 +55,18 @@ impl Game {
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
     pub fn run(&mut self, now: u64)
     {
+        // Hack to the game to create a new bird from gravity
+        if self.bird().add_new_bird{
+            self.bird().add_new_bird = false;
+            self.new_bird();
+        }
+        
         if self.bird().boost
         {
             let d = ((self.bird().u*self.bird().u) + (self.bird().v*self.bird().v)).sqrt();
             self.bird().u += self.bird().a.cos() * self.bird().f * FLAP;
             self.bird().v += self.bird().a.sin() * self.bird().f * FLAP;
-            self.bird().t = 0;
+            self.bird().t = 0.0;
             self.bird().boost = false;
 
             for i in 0..9 {
@@ -96,13 +102,13 @@ impl Game {
                     if self.object_list[index] == self.object_list[index2] ||
                        self.object_list[index].dead == true ||
                        self.object_list[index2].dead == true {
-                        return;
+                        continue;
                     }
                     let d = utils::dist(self.object_list[index].x - self.object_list[index2].x, 
                             self.object_list[index].y - self.object_list[index2].y);
                     if d < 20.0 {
-                        //gravity::kill_bird(&self.object_list[index]);
-                        //gravity::kill_bird(&self.object_list[index2]);
+                        gravity::kill_bird(&mut self.object_list[index]);
+                        gravity::kill_bird(&mut self.object_list[index2]);
                     }
 
                 }
@@ -115,7 +121,7 @@ impl Game {
 
             self.step_particles(DT);
         }
-        if self.bird().t > 5 {
+        if self.bird().t > 5.0 {
             self.new_bird();
         }
 
@@ -146,7 +152,7 @@ impl Game {
             u: 0.0, 
             v: 0.0, 
             a: -PI/2.0,
-            t: 0,
+            t: 0.0,
             boost: true,
             dead: false,
             is_bird: true,
@@ -154,6 +160,7 @@ impl Game {
             y_prev: -utils::R*1.25,
             a_prev: -PI/2.0,
             f: 0.0,
+            add_new_bird: false,
 
         });
     }

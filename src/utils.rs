@@ -10,7 +10,7 @@ pub struct Obj {
     // Probably acceleration
     pub a: f32,
     // Amount of time in seconds since bird's birth, probably
-    pub t: u64,
+    pub t: f32,
     pub f: f32,
     pub boost: bool,
     pub dead: bool,
@@ -18,6 +18,7 @@ pub struct Obj {
     pub x_prev: f32,
     pub y_prev: f32,
     pub a_prev: f32,
+    pub add_new_bird: bool,
 }
 
 pub const M: f32 = 1000000.0;

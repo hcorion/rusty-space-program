@@ -36,7 +36,7 @@ pub fn grav(mut obj: &mut utils::Obj, dt: f32)
     obj.x = xx;
     obj.y = yy;
 
-    obj.t += dt.round() as u64;
+    obj.t += dt;
     
     if dd > 400.0 && !obj.dead { // kill if out of range
         kill_bird(obj);
@@ -50,17 +50,27 @@ pub fn grav(mut obj: &mut utils::Obj, dt: f32)
     obj.v = 0.0;
 
     //remove if not controlled bird
-    remove_obj(obj);
+    //remove_obj(obj);
   }
 
 
 }
 
-pub fn kill_bird(mut obj: &utils::Obj){
-    unimplemented!();
+pub fn kill_bird(mut obj: &mut utils::Obj){
+  // TODO play sound
+  obj.dead = true;
+  obj.u /= 10.0;
+  obj.v /= 10.0;
+  if obj.is_bird{
+    obj.add_new_bird = true;
+    obj.is_bird = false;
+  }
+
+  // TODO Draw death particles
 }
 
 fn remove_obj(mut obj: &utils::Obj){
+  println!{"plz remove"};
   // RELEVANT CODE:
   /*
         // remove if not controlled bird
