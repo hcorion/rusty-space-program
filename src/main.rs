@@ -15,7 +15,6 @@ use time::precise_time_ns;
 use piston_window::*;
 
 mod utils;
-mod gravity;
 mod game;
 
 pub struct App {
