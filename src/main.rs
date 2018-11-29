@@ -10,6 +10,7 @@ use piston::window::WindowSettings;
 use piston::event_loop::*;
 use piston::input::*;
 use piston_window::PistonWindow as Window;
+use piston_window::Window as Window2;
 use time::precise_time_ns;
 
 use piston_window::*;
@@ -39,7 +40,16 @@ impl App {
         // Rotate 2 radians per second.
         self.rotation += 2.0 * args.dt;
     }
+/*
+    fn x_center (&mut self) {
+        let wind: PistonWindow = self.window;
+        return wind.size().width / 2.0;
+    }
 
+    fn y_center (&mut self) {
+        return self.window.size().height / 2.0;
+    }
+*/
     fn draw_background (&mut self, event: Event) {
         let background = &self.background;
         self.window.set_lazy(true);
