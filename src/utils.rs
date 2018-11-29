@@ -19,6 +19,7 @@ pub struct Obj {
     pub y_prev: f32,
     pub a_prev: f32,
     pub add_new_bird: bool,
+    pub remove_me: bool,
 }
 
 pub const M: f32 = 1000000.0;
