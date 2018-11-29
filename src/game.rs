@@ -65,7 +65,7 @@ impl Game {
             for i in 0..9 {
                 let a: f32 = self.bird().a + ((0.5-random::<f32>())*0.25);
                 let u = self.bird().u - (a.cos() * 100.0 * (random::<f32>()+1.0));
-                let v = self.bird().v - (a.cos() * 100.0 * (random::<f32>()+1.0));
+                let v = self.bird().v - (a.sin() * 100.0 * (random::<f32>()+1.0));
 
                 let x1 = self.bird().x;
                 let y1 = self.bird().y;
