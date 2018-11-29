@@ -40,33 +40,37 @@ impl App {
         // Rotate 2 radians per second.
         self.rotation += 2.0 * args.dt;
     }
-/*
-    fn x_center (&mut self) {
-        let wind: PistonWindow = self.window;
-        return wind.size().width / 2.0;
+
+    fn x_center (&self) -> f32 {
+        return (self.window.size().width / 2) as f32;
     }
 
-    fn y_center (&mut self) {
-        return self.window.size().height / 2.0;
+    fn y_center (&self) -> f32 {
+        return (self.window.size().height / 2) as f32;
     }
-*/
+
     fn draw_background (&mut self, event: Event) {
         let background = &self.background;
+        let xcenter = self.x_center() as f64;
+        let ycenter = self.y_center() as f64;
         self.window.set_lazy(true);
         self.window.draw_2d(&event, |c, g| {
             clear([0.296875, 0.5234375, 0.546875, 1.0], g);
-            image(background, c.transform.trans(400.0 - 256.0, 400.0 - 256.0).scale(2.0, 2.0), g);
+            image(background,
+                  c.transform.trans(xcenter - 256.0, ycenter - 256.0).scale(2.0, 2.0), g);
         });
     }
 
     fn draw_particles (&mut self, event: Event, time: f32) {
+        let xcenter = self.x_center();
+        let ycenter = self.y_center();
         for pcl in self.game.particles.iter() {
             let whatpart = if pcl.is_big {&self.sprites.particle_1}
             else {&self.sprites.particle_2};
             self.window.draw_2d(&event, |c, g| {
                 let transform = c.transform.trans(
-                    (400.0 + pcl.x + pcl.u * time).into(),
-                    (400.0 + pcl.y + pcl.v * time).into())
+                    (xcenter + pcl.x + pcl.u * time).into(),
+                    (ycenter + pcl.y + pcl.v * time).into())
                     .scale(2.0, 2.0);
 
                 image(whatpart, transform, g);
@@ -76,6 +80,8 @@ impl App {
 
     fn draw_birds
         (&mut self, event: Event, time: f32, alpha: f32) {
+            let xcenter = self.x_center();
+            let ycenter = self.y_center();
             for bird in self.game.object_list.iter() {
                 let whatbird = if bird.dead {&self.sprites.bird_x}
                 else
@@ -86,8 +92,8 @@ impl App {
                  else {&self.sprites.bird_2}};
                 self.window.draw_2d(&event, |c, g| {
                     let transform = c.transform.trans(
-                        (400.0 + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
-                        (400.0 + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
+                        (xcenter + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
+                        (ycenter + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
                         .rot_rad(
                             utils::interpolate_angle(bird.a_prev, bird.a, alpha))
                         .trans(-20.0, -20.0)
