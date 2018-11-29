@@ -136,7 +136,6 @@ impl Game {
         const DT: f32 = 0.02;
         while self.dt > 0.0 {
             self.dt -= DT;
-
             let mut alive = 0;
             // Unfortunately not as clean as the original
             for index in (0..self.object_list.len()).rev()
@@ -169,12 +168,42 @@ impl Game {
             }
 
             self.step_particles(DT);
+            println!("alive {}", alive);
+            if self.new_score == true && alive < self.max_score
+            {
+                self.new_score = false;
+            }
+            if alive > self.max_score
+            {
+                self.new_score = true;
+                if alive % 5 == 0 {
+                    println!("test2");
+                    self.sound_sending.medal = true;
+                }
+                else {
+                    println!("test");
+                    self.sound_sending.gain = true;
+                }
+            }
+            self.max_score = std::cmp::max(alive, self.max_score);
+                  /*if (newScore == true && score < maxScore) {
+        newScore = false;
+      }
+      if (score > maxScore) {
+        newScore = true;
+        if ([5, 10, 15, 20].indexOf(score) !== -1) {
+          play(sndMedal);
+        } else { 
+          play(sndGain);
+        }
+      }
+      maxScore = Math.max(score, maxScore);*/
         }
         if self.bird().t > 5.0 {
             self.new_bird();
         }
 
-        // Drawing stuff!!!!
+        
 
     }
     // Also known as addPart
@@ -348,6 +377,17 @@ impl Game {
                 self.sound_sending.push_timer = 0.0;
                 music::play_sound(&Sound::Push, music::Repeat::Times(0), music::MAX_VOLUME);
             }
+        }
+        if self.sound_sending.medal
+        {
+            music::play_sound(&Sound::Medal, music::Repeat::Times(0), music::MAX_VOLUME);
+            self.sound_sending.medal = false;
+        }
+        if self.sound_sending.gain
+        {
+            println!("wat");
+            music::play_sound(&Sound::Gain, music::Repeat::Times(0), music::MAX_VOLUME);
+            self.sound_sending.gain = false;
         }
     }
 }
