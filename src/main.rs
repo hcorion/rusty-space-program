@@ -43,7 +43,7 @@ impl App {
         let background = &self.background;
         self.window.set_lazy(true);
         self.window.draw_2d(&event, |c, g| {
-            clear([1.0; 4], g);
+            clear([0.296875, 0.5234375, 0.546875, 1.0], g);
             image(background, c.transform.trans(400.0 - 128.0, 400.0 - 128.0), g);
         });
     }
