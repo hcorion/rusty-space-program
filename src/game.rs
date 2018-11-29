@@ -100,29 +100,6 @@ impl Game {
         return result;
     }
 
-    pub fn music_handler(&mut self, dt: f32)
-    {
-        self.sound_sending.boom_timer += dt + 0.02;
-        self.sound_sending.push_timer += dt + 0.02;
-        if self.sound_sending.boom
-        {
-            self.sound_sending.boom = false;
-            if self.sound_sending.boom_timer > 1.10
-            {
-                self.sound_sending.boom_timer = 0.0;
-                music::play_sound(&Sound::Boom, music::Repeat::Times(0), music::MAX_VOLUME);
-            }
-        }
-        if self.sound_sending.push
-        {
-            self.sound_sending.push = false;
-            if self.sound_sending.push_timer > 0.40
-            {
-                self.sound_sending.push_timer = 0.0;
-                music::play_sound(&Sound::Push, music::Repeat::Times(0), music::MAX_VOLUME);
-            }
-        }
-    }
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
     pub fn run(&mut self, now: u64)
     {
@@ -327,7 +304,7 @@ impl Game {
     pub fn kill_bird(&mut self, index: usize)
     {
         self.sound_sending.boom = true;
-        
+
         self.object_list[index].dead = true;
         self.object_list[index].u /= 10.0;
         self.object_list[index].v /= 10.0;
@@ -347,6 +324,30 @@ impl Game {
                         0.5+random::<f32>(), 
                         if random::<f32>() < 0.5 {true} else {false});
             
+        }
+    }
+
+    pub fn music_handler(&mut self, dt: f32)
+    {
+        self.sound_sending.boom_timer += dt + 0.02;
+        self.sound_sending.push_timer += dt + 0.02;
+        if self.sound_sending.boom
+        {
+            self.sound_sending.boom = false;
+            if self.sound_sending.boom_timer > 1.10
+            {
+                self.sound_sending.boom_timer = 0.0;
+                music::play_sound(&Sound::Boom, music::Repeat::Times(0), music::MAX_VOLUME);
+            }
+        }
+        if self.sound_sending.push
+        {
+            self.sound_sending.push = false;
+            if self.sound_sending.push_timer > 0.40
+            {
+                self.sound_sending.push_timer = 0.0;
+                music::play_sound(&Sound::Push, music::Repeat::Times(0), music::MAX_VOLUME);
+            }
         }
     }
 }
