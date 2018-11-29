@@ -18,6 +18,8 @@ use piston_window::*;
 mod utils;
 mod game;
 
+use std::f32::consts::PI;
+
 pub struct App {
    // gl: GlGraphics, // OpenGL drawing backend.
     rotation: f64,   // Rotation for the square.
@@ -30,6 +32,7 @@ pub struct App {
 impl App {
     fn render(&mut self, _args: &RenderArgs, event: Event) {
         self.draw_background(event.clone());
+        self.draw_limit(event.clone());
         let dt = self.game.dt;
         self.draw_particles(event.clone(), dt);
         self.draw_birds(event, (precise_time_ns()/1000000) as f32 / 1000.0, dt/0.02+1.0);
@@ -46,6 +49,26 @@ impl App {
 
     fn y_center (&self) -> f32 {
         return (self.window.size().height / 2) as f32;
+    }
+
+    fn draw_limit (&mut self, event: Event) {
+        let quantity = 50;
+        let q2 = 50.0;
+        let xcenter = self.x_center() as f64;
+        let ycenter = self.y_center() as f64;
+        for n in 0..quantity {
+            let whatpart = if n % 2 == 0 {&self.sprites.particle_1}
+            else {&self.sprites.particle_2};
+            self.window.draw_2d(&event, |c, g| {
+                let transform = c.transform.rot_rad(n as f64 * (PI * 2.0 / q2) as f64)
+                    .trans(xcenter, 0.0)
+                    .rot_rad(-n as f64 * (PI * 2.0 / q2) as f64)
+                    .trans(xcenter, ycenter)
+                    .scale(2.0, 2.0);
+
+                image(whatpart, transform, g);
+            });
+        }
     }
 
     fn draw_background (&mut self, event: Event) {
