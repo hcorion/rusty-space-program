@@ -116,8 +116,7 @@ impl App {
                     let transform = c.transform.trans(
                         (xcenter + alpha*bird.x + (1.0-alpha)*bird.x_prev).into(),
                         (ycenter + alpha*bird.y + (1.0-alpha)*bird.y_prev).into())
-                        .rot_rad(
-                            utils::interpolate_angle(bird.a_prev, bird.a, alpha))
+                        .rot_rad(utils::interpolate_angle(bird.a_prev, bird.a, alpha))
                         .trans(-20.0, -20.0)
                         .scale(2.0, 2.0);
 
