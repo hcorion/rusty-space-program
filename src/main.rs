@@ -156,7 +156,27 @@ fn init_app () -> App {
         bird_3: initialize_texture(&mut window, "bird-3.png"),
         bird_x: initialize_texture(&mut window, "bird-x.png"),
         particle_1: initialize_texture(&mut window, "particle-1.png"),
-        particle_2: initialize_texture(&mut window, "particle-2.png")
+        particle_2: initialize_texture(&mut window, "particle-2.png"),
+        arrow: initialize_texture(&mut window, "arrow.png"),
+        logo: initialize_texture(&mut window, "logo.png"),
+        medal_bronze: initialize_texture(&mut window, "medal-bronze.png"),
+        medal_gold: initialize_texture(&mut window, "medal-gold.png"),
+        medal_platinum: initialize_texture(&mut window, "medal-platinum.png"),
+        medal_silver: initialize_texture(&mut window, "medal-silver.png"),
+        new: initialize_texture(&mut window, "new.png"),
+        number_0: initialize_texture(&mut window, "number-0.png"),
+        number_1: initialize_texture(&mut window, "number-1.png"),
+        number_2: initialize_texture(&mut window, "number-2.png"),
+        number_3: initialize_texture(&mut window, "number-3.png"),
+        number_4: initialize_texture(&mut window, "number-4.png"),
+        number_5: initialize_texture(&mut window, "number-5.png"),
+        number_6: initialize_texture(&mut window, "number-6.png"),
+        number_7: initialize_texture(&mut window, "number-7.png"),
+        number_8: initialize_texture(&mut window, "number-8.png"),
+        number_9: initialize_texture(&mut window, "number-9.png"),
+        scoreboard: initialize_texture(&mut window, "scoreboard.png"),
+        tap: initialize_texture(&mut window, "tap.png"),
+        tap_top: initialize_texture(&mut window, "tap-top.png")
     };
 
     let mut app = App {

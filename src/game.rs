@@ -35,7 +35,27 @@ pub struct Sprites {
     pub bird_3: G2dTexture,
     pub bird_x: G2dTexture,
     pub particle_1: G2dTexture,
-    pub particle_2: G2dTexture
+    pub particle_2: G2dTexture,
+    pub arrow: G2dTexture,
+    pub logo: G2dTexture,
+    pub medal_bronze: G2dTexture,
+    pub medal_gold: G2dTexture,
+    pub medal_platinum: G2dTexture,
+    pub medal_silver: G2dTexture,
+    pub new: G2dTexture,
+    pub number_0: G2dTexture,
+    pub number_1: G2dTexture,
+    pub number_2: G2dTexture,
+    pub number_3: G2dTexture,
+    pub number_4: G2dTexture,
+    pub number_5: G2dTexture,
+    pub number_6: G2dTexture,
+    pub number_7: G2dTexture,
+    pub number_8: G2dTexture,
+    pub number_9: G2dTexture,
+    pub scoreboard: G2dTexture,
+    pub tap: G2dTexture,
+    pub tap_top: G2dTexture
 }
 
 impl Game {
