@@ -50,7 +50,9 @@ pub fn grav(mut obj: &mut utils::Obj, dt: f32)
     obj.v = 0.0;
 
     //remove if not controlled bird
-    //remove_obj(obj);
+    if (!obj.is_bird) {
+      remove_obj(obj);
+    }
   }
 
 
@@ -69,14 +71,6 @@ pub fn kill_bird(mut obj: &mut utils::Obj){
   // TODO Draw death particles
 }
 
-fn remove_obj(mut obj: &utils::Obj){
-  println!{"plz remove"};
-  // RELEVANT CODE:
-  /*
-        // remove if not controlled bird
-      if (obj !== bird && toRemove.indexOf(obj) == -1) { 
-        toRemove.push(obj);
-      }
-  */
-    //unimplemented!();
+fn remove_obj(mut obj: &mut utils::Obj){
+  obj.remove_me = true;
 }

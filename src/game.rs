@@ -118,6 +118,11 @@ impl Game {
 
                 // TODO: Remove things
             }
+            for i in (0..self.object_list.len()).rev() {
+                if self.object_list[i].remove_me {
+                    self.object_list.remove(i);
+                }
+            }
 
             self.step_particles(DT);
         }
@@ -161,6 +166,7 @@ impl Game {
             a_prev: -PI/2.0,
             f: 0.0,
             add_new_bird: false,
+            remove_me: false,
 
         });
     }
