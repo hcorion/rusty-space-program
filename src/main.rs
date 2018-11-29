@@ -75,6 +75,7 @@ impl App {
 
     fn draw_background (&mut self, event: Event) {
         let background = &self.background;
+        let logo = &self.sprites.logo;
         let xcenter = self.x_center() as f64;
         let ycenter = self.y_center() as f64;
         self.window.set_lazy(true);
@@ -82,6 +83,7 @@ impl App {
             clear([0.296875, 0.5234375, 0.546875, 1.0], g);
             image(background,
                   c.transform.trans(xcenter - 256.0, ycenter - 256.0).scale(2.0, 2.0), g);
+            image(logo, c.transform.trans(0.0, 0.0), g);
         });
     }
 
