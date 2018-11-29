@@ -18,7 +18,6 @@ pub struct Obj {
     pub x_prev: f32,
     pub y_prev: f32,
     pub a_prev: f32,
-    pub add_new_bird: bool,
     pub remove_me: bool,
 }
 

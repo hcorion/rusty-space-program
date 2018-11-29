@@ -40,26 +40,20 @@ pub struct Sprites {
 
 impl Game {
     pub fn new() -> Game {
-    Game {
-        dt: 0.0,
-        old_t: 0,
-        particles: Vec::new(),
-        object_list: Vec::new(),
-        max_score: 0,
-        new_score: false,
-        show_help: true,
-        push: 0,
+        Game {
+            dt: 0.0,
+            old_t: 0,
+            particles: Vec::new(),
+            object_list: Vec::new(),
+            max_score: 0,
+            new_score: false,
+            show_help: true,
+            push: 0,
+        }
     }
-}
     // Now should be equal to milliseconds since a time (on JS it's since the app started)
     pub fn run(&mut self, now: u64)
     {
-        // Hack to the game to create a new bird from gravity
-        if self.bird().add_new_bird{
-            self.bird().add_new_bird = false;
-            self.new_bird();
-        }
-        
         if self.bird().boost
         {
             let d = ((self.bird().u*self.bird().u) + (self.bird().v*self.bird().v)).sqrt();
@@ -96,7 +90,9 @@ impl Game {
             // Unfortunately not as clean as the original
             for index in (0..self.object_list.len()).rev()
             {
-                grav(&mut self.object_list[index], DT);
+                if self.grav(index, DT) {
+                    self.kill_bird(index);
+                }
                 for index2 in 0..self.object_list.len() {
                     if self.object_list[index] == self.object_list[index2] ||
                        self.object_list[index].dead == true ||
@@ -106,8 +102,8 @@ impl Game {
                     let d = utils::dist(self.object_list[index].x - self.object_list[index2].x, 
                             self.object_list[index].y - self.object_list[index2].y);
                     if d < 20.0 {
-                        kill_bird(&mut self.object_list[index]);
-                        kill_bird(&mut self.object_list[index2]);
+                        self.kill_bird(index);
+                        self.kill_bird(index2);
                     }
 
                 }
@@ -162,7 +158,6 @@ impl Game {
             y_prev: -utils::R*1.25,
             a_prev: -PI/2.0,
             f: 0.0,
-            add_new_bird: false,
             remove_me: false,
 
         });
@@ -194,84 +189,88 @@ impl Game {
         }
         self.particles.retain(|ref x| x.t >= 0.0);
     }
-}
 
-pub fn grav(mut obj: &mut utils::Obj, dt: f32)
-{
-  obj.x_prev = obj.x;
-  obj.y_prev = obj.y;
-  obj.a_prev = obj.a;
+    pub fn grav(&mut self, index: usize, dt: f32) -> bool
+    {
+        let obj = &mut self.object_list[index];
+        obj.x_prev = obj.x;
+        obj.y_prev = obj.y;
+        obj.a_prev = obj.a;
 
-  let d = utils::dist(obj.x, obj.y);
-  let f = utils::G*utils::M/(d*d);
-  obj.f = f;
-  let n_x = obj.x/d;
-  let n_y = obj.y/d;
+        let d = utils::dist(obj.x, obj.y);
+        let f = utils::G*utils::M/(d*d);
+        obj.f = f;
+        let n_x = obj.x/d;
+        let n_y = obj.y/d;
 
-  obj.u -= n_x * f * dt as f32;
-  obj.v -= n_y * f * dt as f32;
+        obj.u -= n_x * f * dt as f32;
+        obj.v -= n_y * f * dt as f32;
 
-  // Compute angle
-  if obj.dead == true {
-    obj.a += (10.0*dt) as f32;
-  }
-  else {
-    let aa = obj.y.atan2(obj.x);
-    if d < 200.0 {
-      obj.a = aa + (PI/2.0) * ((d-100.0)/100.0);
+        // Compute angle
+        if obj.dead == true {
+            obj.a += (10.0*dt) as f32;
+        }
+        else {
+            let aa = obj.y.atan2(obj.x);
+            if d < 200.0 {
+            obj.a = aa + (PI/2.0) * ((d-100.0)/100.0);
+            }
+            else {
+            obj.a = aa + (PI/2.0);
+            }
+        }
+        let xx = obj.x + obj.u * dt as f32;
+        let yy = obj.y + obj.v * dt as f32;
+        let dd = utils::dist(xx, yy);
+        if dd > utils::R {
+            obj.x = xx;
+            obj.y = yy;
+
+            obj.t += dt;
+            
+            if dd > 400.0 && !obj.dead { // kill if out of range
+                return true;
+                //self.kill_bird(index);
+            }
+        }
+        else {
+            // Colliding
+            obj.x = utils::R*xx/dd;
+            obj.y = utils::R*yy/dd;
+            obj.u = 0.0;
+            obj.v = 0.0;
+
+            //remove if not controlled bird
+            if !obj.is_bird {
+            obj.remove_me = true;
+            }
+        }
+        return false;
     }
-    else {
-      obj.a = aa + (PI/2.0);
+
+    pub fn kill_bird(&mut self, index: usize)
+    {
+        // TODO play sound
+        //let obj = &mut self.object_list[index];
+        self.object_list[index].dead = true;
+        self.object_list[index].u /= 10.0;
+        self.object_list[index].v /= 10.0;
+        
+        if self.object_list[index].is_bird{
+            self.new_bird();
+        }
+        for i in 0..9
+        {
+            let a = random::<f32>()*PI*2.0;
+            let U = a.cos() * 100.0 * (random::<f32>()+1.0);
+            let V = a.sin() * 100.0 * (random::<f32>()+1.0);
+            let x = self.object_list[index].x;
+            let y = self.object_list[index].y;
+            self.add_particle(x, y,
+                        U, V,
+                        0.5+random::<f32>(), 
+                        if random::<f32>() < 0.5 {true} else {false});
+            
+        }
     }
-  }
-  let xx = obj.x + obj.u * dt as f32;
-  let yy = obj.y + obj.v * dt as f32;
-  let dd = utils::dist(xx, yy);
-  if dd > utils::R {
-    obj.x = xx;
-    obj.y = yy;
-
-    obj.t += dt;
-    
-    if dd > 400.0 && !obj.dead { // kill if out of range
-        kill_bird(obj);
-      }
-  }
-  else {
-    // Colliding
-    obj.x = utils::R*xx/dd;
-    obj.y = utils::R*yy/dd;
-    obj.u = 0.0;
-    obj.v = 0.0;
-
-    //remove if not controlled bird
-    if !obj.is_bird {
-      obj.remove_me = true;
-    }
-  }
-
-
-}
-
-pub fn kill_bird(mut obj: &mut utils::Obj){
-  // TODO play sound
-  obj.dead = true;
-  obj.u /= 10.0;
-  obj.v /= 10.0;
-  if obj.is_bird{
-    obj.add_new_bird = true;
-    obj.is_bird = false;
-  }
-  for i in 0..9
-  {
-    let a = random::<f32>()*PI*2.0;
-    let U = a.cos() * 100.0 * (random::<f32>()+1.0);
-    let V = a.sin() * 100.0 * (random::<f32>()+1.0);
-
-    add_particle(obj.x, obj.y,
-                 U, V,
-                 0.5+random::<f32>(), 
-                 if random::<f32>() < 0.5 {true} else {false});
-    
-  }
 }
