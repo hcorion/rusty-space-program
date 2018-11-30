@@ -1,5 +1,4 @@
 use utils;
-use time::precise_time_ns;
 use std::f32::consts::PI;
 use std::cmp::max;
 use rand::random;
@@ -108,13 +107,14 @@ impl Game {
     {
         if self.bird().boost
         {
-            let d = ((self.bird().u*self.bird().u) + (self.bird().v*self.bird().v)).sqrt();
+            //FIXME: dead line?
+            //let d = ((self.bird().u*self.bird().u) + (self.bird().v*self.bird().v)).sqrt();
             self.bird().u += self.bird().a.cos() * self.bird().f * FLAP;
             self.bird().v += self.bird().a.sin() * self.bird().f * FLAP;
             self.bird().t = 0.0;
             self.bird().boost = false;
 
-            for i in 0..9 {
+            for _i in 0..9 {
                 let a: f32 = self.bird().a + ((0.5-random::<f32>())*0.25);
                 let u = self.bird().u - (a.cos() * 100.0 * (random::<f32>()+1.0));
                 let v = self.bird().v - (a.sin() * 100.0 * (random::<f32>()+1.0));
@@ -131,7 +131,7 @@ impl Game {
         if self.old_t == 0 {
             self.old_t = now;
         }
-        self.dt += ((now - self.old_t) as f32 / 1000.0);
+        self.dt += (now - self.old_t) as f32 / 1000.0;
         self.old_t = now;
         let musicdt = self.dt;
         self.music_handler(musicdt);
@@ -344,15 +344,15 @@ impl Game {
         if self.object_list[index].is_bird{
             self.new_bird();
         }
-        for i in 0..9
+        for _i in 0..9
         {
             let a = random::<f32>()*PI*2.0;
-            let U = a.cos() * 100.0 * (random::<f32>()+1.0);
-            let V = a.sin() * 100.0 * (random::<f32>()+1.0);
+            let uu = a.cos() * 100.0 * (random::<f32>()+1.0);
+            let vv = a.sin() * 100.0 * (random::<f32>()+1.0);
             let x = self.object_list[index].x;
             let y = self.object_list[index].y;
             self.add_particle(x, y,
-                        U, V,
+                        uu, vv,
                         0.5+random::<f32>(), 
                         if random::<f32>() < 0.5 {true} else {false});
             

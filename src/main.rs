@@ -21,7 +21,6 @@ mod utils;
 mod game;
 
 use std::f32::consts::PI;
-use std::cmp::max;
 
 pub struct App {
    // gl: GlGraphics, // OpenGL drawing backend.
@@ -263,7 +262,7 @@ fn init_app () -> App {
         tap_top: initialize_texture(&mut window, "tap-top.png")
     };
 
-    let mut app = App {
+    let app = App {
         //gl: GlGraphics::new(opengl),
         rotation: 0.0,
         background: initialize_texture(&mut window, "bg.png"),
