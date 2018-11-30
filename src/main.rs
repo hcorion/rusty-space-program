@@ -40,6 +40,7 @@ impl App {
         if self.game.show_help {self.draw_help(event.clone(), time);}
         let dt = self.game.dt;
         self.draw_particles(event.clone(), dt);
+        self.draw_score(event.clone());
         self.draw_birds(event, time, dt/0.02+1.0);
     }
 
@@ -74,6 +75,58 @@ impl App {
                 image(whatpart, transform, g);
             });
         }
+    }
+    fn get_letter_sprite(&self, number: u32) -> G2dTexture
+    {
+        return match number {
+            1 => self.sprites.number_1.clone(),
+            2 => self.sprites.number_2.clone(),
+            3 => self.sprites.number_3.clone(),
+            4 => self.sprites.number_4.clone(),
+            5 => self.sprites.number_5.clone(),
+            6 => self.sprites.number_6.clone(),
+            7 => self.sprites.number_7.clone(),
+            8 => self.sprites.number_8.clone(),
+            9 => self.sprites.number_9.clone(),
+            _ => self.sprites.number_0.clone(),
+            };
+    }
+    fn draw_score(&mut self, event: Event)
+    {
+        let SCORE_POS_X: f64 = (self.window.size().width - 60) as f64;
+        let SCORE_POS_Y: f64 = 31.0;
+        let SCORE_SCALE: f64 = 2.5;
+        // Single digit numbers
+
+        let max_score = self.game.max_score;
+        let cur_score = self.game.cur_score;
+        let max_score_tens = (max_score as f32 * 0.1).floor() as u32;
+        let max_score_ones = (((max_score as f32 * 0.1) - max_score_tens as f32) * 10.0) as u32;
+        let cur_score_tens = (cur_score as f32 * 0.1).floor() as u32;
+        let cur_score_ones = (((cur_score as f32 * 0.1) - cur_score_tens as f32) * 10.0) as u32;
+        
+        let max_number_tens = &self.get_letter_sprite(max_score_tens);
+        let max_number_ones = &self.get_letter_sprite(max_score_ones);
+        
+        let cur_number_tens = &self.get_letter_sprite(cur_score_tens);
+        let cur_number_ones = &self.get_letter_sprite(cur_score_ones);
+
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X, SCORE_POS_Y).scale(SCORE_SCALE, SCORE_SCALE);
+            image(cur_number_tens, transform, g);
+        });
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X+20.0, SCORE_POS_Y).scale(SCORE_SCALE, SCORE_SCALE);
+            image(cur_number_ones, transform, g);
+        });
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X, SCORE_POS_Y+45.0).scale(SCORE_SCALE, SCORE_SCALE);
+            image(max_number_tens, transform, g);
+        });
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X+20.0, SCORE_POS_Y+45.0).scale(SCORE_SCALE, SCORE_SCALE);
+            image(max_number_ones, transform, g);
+        });
     }
 
     fn draw_help (&mut self, event: Event, time: f32) {

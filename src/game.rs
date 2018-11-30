@@ -26,6 +26,7 @@ pub struct Game {
     pub particles: Vec<Particle>,
     pub object_list: Vec<utils::Obj>,
     pub max_score: u32,
+    pub cur_score: u32,
     pub new_score: bool,
     pub show_help: bool,
     pub push: u32,
@@ -89,6 +90,7 @@ impl Game {
             particles: Vec::new(),
             object_list: Vec::new(),
             max_score: 0,
+            cur_score: 0,
             new_score: false,
             show_help: true,
             push: 0,
@@ -169,6 +171,7 @@ impl Game {
             }
 
             self.step_particles(DT);
+            self.cur_score = alive;
             if self.new_score == true && alive < self.max_score
             {
                 self.new_score = false;
@@ -310,9 +313,9 @@ impl Game {
 
             obj.t += dt;
             
-            if dd > 400.0 && !obj.dead { // kill if out of range
+            // Kill the bird if out of range
+            if dd > 400.0 && !obj.dead { 
                 return true;
-                //self.kill_bird(index);
             }
         }
         else {
