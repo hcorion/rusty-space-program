@@ -92,9 +92,9 @@ impl App {
     }
     fn draw_score(&mut self, event: Event)
     {
-        let SCORE_POS_X: f64 = (self.window.size().width - 60) as f64;
-        let SCORE_POS_Y: f64 = 31.0;
-        let SCORE_SCALE: f64 = 2.5;
+        let score_pos_x: f64 = (self.window.size().width - 60) as f64;
+        let score_pos_y: f64 = 31.0;
+        let score_scale: f64 = 2.5;
         // Single digit numbers
 
         let max_score = self.game.max_score;
@@ -111,19 +111,19 @@ impl App {
         let cur_number_ones = &self.get_letter_sprite(cur_score_ones);
 
         self.window.draw_2d(&event, |c, g| {
-            let transform = c.transform.trans(SCORE_POS_X, SCORE_POS_Y).scale(SCORE_SCALE, SCORE_SCALE);
+            let transform = c.transform.trans(score_pos_x, score_pos_y).scale(score_scale, score_scale);
             image(cur_number_tens, transform, g);
         });
         self.window.draw_2d(&event, |c, g| {
-            let transform = c.transform.trans(SCORE_POS_X+20.0, SCORE_POS_Y).scale(SCORE_SCALE, SCORE_SCALE);
+            let transform = c.transform.trans(score_pos_x+20.0, score_pos_y).scale(score_scale, score_scale);
             image(cur_number_ones, transform, g);
         });
         self.window.draw_2d(&event, |c, g| {
-            let transform = c.transform.trans(SCORE_POS_X, SCORE_POS_Y+45.0).scale(SCORE_SCALE, SCORE_SCALE);
+            let transform = c.transform.trans(score_pos_x, score_pos_y+45.0).scale(score_scale, score_scale);
             image(max_number_tens, transform, g);
         });
         self.window.draw_2d(&event, |c, g| {
-            let transform = c.transform.trans(SCORE_POS_X+20.0, SCORE_POS_Y+45.0).scale(SCORE_SCALE, SCORE_SCALE);
+            let transform = c.transform.trans(score_pos_x+20.0, score_pos_y+45.0).scale(score_scale, score_scale);
             image(max_number_ones, transform, g);
         });
         
@@ -131,7 +131,7 @@ impl App {
         {
             let new = &self.sprites.new;
             self.window.draw_2d(&event, |c, g| {
-                let transform = c.transform.trans(SCORE_POS_X-45.0, SCORE_POS_Y + 4.0).scale(SCORE_SCALE, SCORE_SCALE);
+                let transform = c.transform.trans(score_pos_x-45.0, score_pos_y + 4.0).scale(score_scale, score_scale);
                 image(new, transform, g);
             });
         }
