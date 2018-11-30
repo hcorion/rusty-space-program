@@ -33,11 +33,13 @@ pub struct App {
 
 impl App {
     fn render(&mut self, _args: &RenderArgs, event: Event) {
+        let time = (precise_time_ns()/1000000) as f32 / 1000.0;
         self.draw_background(event.clone());
         self.draw_limit(event.clone());
+        self.draw_help(event.clone(), time);
         let dt = self.game.dt;
         self.draw_particles(event.clone(), dt);
-        self.draw_birds(event, (precise_time_ns()/1000000) as f32 / 1000.0, dt/0.02+1.0);
+        self.draw_birds(event, time, dt/0.02+1.0);
     }
 
     fn update(&mut self, args: &UpdateArgs) {
@@ -73,17 +75,41 @@ impl App {
         }
     }
 
+    fn draw_help (&mut self, event: Event, time: f32) {
+        let timefrag = time % 1.0;
+        let tap = &self.sprites.tap;
+        let top = &self.sprites.tap_top;
+        let xcenter = self.x_center() as f64;
+        let ycenter = self.y_center() as f64;
+        if (0.25 < timefrag) && (timefrag < 0.5)
+        {self.window.draw_2d(&event, |c, g| {
+            image(tap,
+                  c.transform.trans(xcenter - 9.0, ycenter - 6.0).scale(2.0, 2.0), g);
+            image(top,
+                  c.transform.trans(xcenter - 5.0, ycenter - 30.0).scale(2.0, 2.0), g);
+        });}
+        else
+        {self.window.draw_2d(&event, |c, g| {
+            image(tap,
+                  c.transform.trans(xcenter - 9.0, ycenter - 10.0).scale(2.0, 2.0), g);
+        });}
+    }
+
     fn draw_background (&mut self, event: Event) {
         let background = &self.background;
         let logo = &self.sprites.logo;
+        let scoreboard = &self.sprites.scoreboard;
         let xcenter = self.x_center() as f64;
         let ycenter = self.y_center() as f64;
+        let width = self.window.size().width as f64;
         self.window.set_lazy(true);
         self.window.draw_2d(&event, |c, g| {
             clear([0.296875, 0.5234375, 0.546875, 1.0], g);
             image(background,
                   c.transform.trans(xcenter - 256.0, ycenter - 256.0).scale(2.0, 2.0), g);
-            image(logo, c.transform.trans(0.0, 0.0), g);
+            image(logo, c.transform.scale(2.0, 2.0), g);
+            image(scoreboard,
+            c.transform.trans(width - 226.0, 0.0).scale(2.0, 2.0), g);
         });
     }
 
