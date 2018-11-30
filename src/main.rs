@@ -37,7 +37,7 @@ impl App {
         let time = (precise_time_ns()/1000000) as f32 / 1000.0;
         self.draw_background(event.clone());
         self.draw_limit(event.clone());
-        self.draw_help(event.clone(), time);
+        if self.game.show_help {self.draw_help(event.clone(), time);}
         let dt = self.game.dt;
         self.draw_particles(event.clone(), dt);
         self.draw_score(event.clone());

@@ -171,7 +171,6 @@ impl Game {
             }
 
             self.step_particles(DT);
-            println!("alive {}", alive);
             self.cur_score = alive;
             if self.new_score == true && alive < self.max_score
             {
