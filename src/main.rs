@@ -37,6 +37,7 @@ impl App {
         self.draw_limit(event.clone());
         let dt = self.game.dt;
         self.draw_particles(event.clone(), dt);
+        self.draw_score(event.clone());
         self.draw_birds(event, (precise_time_ns()/1000000) as f32 / 1000.0, dt/0.02+1.0);
     }
 
@@ -72,7 +73,59 @@ impl App {
             });
         }
     }
+    fn get_letter_sprite(&self, number: u32) -> G2dTexture
+    {
+        return match number {
+            1 => self.sprites.number_1.clone(),
+            2 => self.sprites.number_2.clone(),
+            3 => self.sprites.number_3.clone(),
+            4 => self.sprites.number_4.clone(),
+            5 => self.sprites.number_5.clone(),
+            6 => self.sprites.number_6.clone(),
+            7 => self.sprites.number_7.clone(),
+            8 => self.sprites.number_8.clone(),
+            9 => self.sprites.number_9.clone(),
+            _ => self.sprites.number_0.clone(),
+            };
+    }
+    fn draw_score(&mut self, event: Event)
+    {
+        const SCORE_POS_X: f64 = 20.0;
+        const SCORE_POS_Y: f64 = 20.0;
+        const SCORE_SCALE: f64 = 5.0;
+        // Single digit numbers
 
+        let max_score = self.game.max_score+9;
+        let cur_score = self.game.cur_score;
+        let max_score_tens = (max_score as f32 * 0.1).floor() as u32;
+        let max_score_ones = (((max_score as f32 * 0.1) - max_score_tens as f32) * 10.0) as u32;
+        let cur_score_tens = (cur_score as f32 * 0.1).floor() as u32;
+        let cur_score_ones = (((cur_score as f32 * 0.1) - cur_score_tens as f32) * 10.0) as u32;
+        
+        let max_number_tens = &self.get_letter_sprite(max_score_tens);
+        let max_number_ones = &self.get_letter_sprite(max_score_ones);
+        
+        let cur_number_tens = &self.get_letter_sprite(cur_score_tens);
+        let cur_number_ones = &self.get_letter_sprite(cur_score_ones);
+
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X, SCORE_POS_Y).scale(SCORE_SCALE, SCORE_SCALE);
+            image(max_number_tens, transform, g);
+        });
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X+50.0, SCORE_POS_Y).scale(SCORE_SCALE, SCORE_SCALE);
+            image(max_number_ones, transform, g);
+        });
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X, SCORE_POS_Y+50.0).scale(SCORE_SCALE, SCORE_SCALE);
+            image(cur_number_tens, transform, g);
+        });
+        self.window.draw_2d(&event, |c, g| {
+            let transform = c.transform.trans(SCORE_POS_X+50.0, SCORE_POS_Y+50.0).scale(SCORE_SCALE, SCORE_SCALE);
+            image(cur_number_ones, transform, g);
+        });
+
+    }
     fn draw_background (&mut self, event: Event) {
         let background = &self.background;
         let logo = &self.sprites.logo;
