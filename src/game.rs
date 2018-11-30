@@ -1,6 +1,7 @@
 use utils;
 use time::precise_time_ns;
 use std::f32::consts::PI;
+use std::cmp::max;
 use rand::random;
 use music;
 
@@ -185,7 +186,7 @@ impl Game {
                     self.sound_sending.gain = true;
                 }
             }
-            self.max_score = std::cmp::max(alive, self.max_score);
+            self.max_score = max(alive, self.max_score);
                   /*if (newScore == true && score < maxScore) {
         newScore = false;
       }

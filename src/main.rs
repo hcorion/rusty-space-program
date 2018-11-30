@@ -21,6 +21,7 @@ mod utils;
 mod game;
 
 use std::f32::consts::PI;
+use std::cmp::max;
 
 pub struct App {
    // gl: GlGraphics, // OpenGL drawing backend.
@@ -84,14 +85,14 @@ impl App {
         if (0.25 < timefrag) && (timefrag < 0.5)
         {self.window.draw_2d(&event, |c, g| {
             image(tap,
-                  c.transform.trans(xcenter - 9.0, ycenter - 6.0).scale(2.0, 2.0), g);
+                  c.transform.trans(xcenter - 11.0, ycenter - 6.0).scale(2.0, 2.0), g);
             image(top,
-                  c.transform.trans(xcenter - 5.0, ycenter - 30.0).scale(2.0, 2.0), g);
+                  c.transform.trans(xcenter - 7.0, ycenter - 18.0).scale(2.0, 2.0), g);
         });}
         else
         {self.window.draw_2d(&event, |c, g| {
             image(tap,
-                  c.transform.trans(xcenter - 9.0, ycenter - 10.0).scale(2.0, 2.0), g);
+                  c.transform.trans(xcenter - 11.0, ycenter - 2.0).scale(2.0, 2.0), g);
         });}
     }
 
