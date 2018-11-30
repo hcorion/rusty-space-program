@@ -127,6 +127,15 @@ impl App {
             let transform = c.transform.trans(SCORE_POS_X+20.0, SCORE_POS_Y+45.0).scale(SCORE_SCALE, SCORE_SCALE);
             image(max_number_ones, transform, g);
         });
+        
+        if self.game.new_score
+        {
+            let new = &self.sprites.new;
+            self.window.draw_2d(&event, |c, g| {
+                let transform = c.transform.trans(SCORE_POS_X-45.0, SCORE_POS_Y + 4.0).scale(SCORE_SCALE, SCORE_SCALE);
+                image(new, transform, g);
+            });
+        }
     }
 
     fn draw_help (&mut self, event: Event, time: f32) {
