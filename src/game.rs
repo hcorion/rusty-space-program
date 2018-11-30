@@ -180,11 +180,9 @@ impl Game {
             {
                 self.new_score = true;
                 if alive % 5 == 0 {
-                    println!("test2");
                     self.sound_sending.medal = true;
                 }
                 else {
-                    println!("test");
                     self.sound_sending.gain = true;
                 }
             }
@@ -388,7 +386,6 @@ impl Game {
         }
         if self.sound_sending.gain
         {
-            println!("wat");
             music::play_sound(&Sound::Gain, music::Repeat::Times(0), music::MAX_VOLUME);
             self.sound_sending.gain = false;
         }
